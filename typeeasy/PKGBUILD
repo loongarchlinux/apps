@@ -1,0 +1,46 @@
+pkgname=typeeasy
+pkgver=11.6
+pkgrel=1
+pkgdesc="Kingsoft TypeEasy(金山打字通)"
+arch=('any')
+url="https://www.51dzt.com"
+license=('custom')
+groups=('lat')
+depends=('wine')
+OPTIONS=(!strip)
+noextract=("$pkgname.tar.xz")
+source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/089b9c22872a265bbc2fd6946969ae48/$pkgname.tar.xz"
+    16.png
+    256.png
+    32.png
+    48.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('4be522e861843ee232acecb9e1449a711d0dbee53e44801a6180729c17e6cbbe'
+            'ab3f9192d9a3469f949b235a4012e43fabb9c0ec1378b162ed3d50359a45c94b'
+            '7f93582b17651e4d83c16d1e63d8464b65f333e8e09e584b056b90db58830f97'
+            'eec64b8790a8eb7b1a94fd2ff2009889689fb0380f1224ac51aeea989ebabc2e'
+            '5ec8579cadfeaac927fa42b7f753a1641f70f64e0375f8923260ba302bebdbc3'
+            '444a8219f04123245336508c3ec6cfb9cbda51d7151a75e00fcca1d20d82546f'
+            '88db1e7daf3bded68c587e679f8f6f154c3bae0a2fdca62ae9a6ac5ab5dee6e4')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}

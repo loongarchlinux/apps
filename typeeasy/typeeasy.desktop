@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=EasyType
+Name[zh_CN]=金山打字通
+Exec=typeeasy
+Type=Application
+StartupNotify=true
+Icon=typeeasy
+StartupWMClass=typeeasy.exe
+Categories=Education

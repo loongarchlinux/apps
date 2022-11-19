@@ -1,0 +1,9 @@
+# vim: set ft=sh:
+APP_NAME=typeeasy
+APP_NAME_CN=金山打字通
+APP_VERSION=11.6                    # App 版本号
+APP_ARCHIVE=typeeasy.tar.xz         # App 压缩包文件名
+APP_IGNORE=.appignore               # App 升级时需要忽略的文件列表
+APP_RUN_CMD="TypeEasy.exe"          # App 运行命令
+APP_RUN_PATH="drive_c/Program Files/Typeeasy"              # App 运行时需要进入的路径
+APP_RUN_WINE=            		    # App 运行时使用的 wine 版本号
