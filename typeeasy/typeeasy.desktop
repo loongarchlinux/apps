@@ -5,5 +5,5 @@ Exec=typeeasy
 Type=Application
 StartupNotify=true
 Icon=typeeasy
-StartupWMClass=typeeasy.exe
 Categories=Education
+StartupWMClass=typeeasy.exe
