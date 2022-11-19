@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=aardio
+Name[zh_CN]=aardio编程语言
+Comment=aardio
+Comment[zh_CN]=桌面软件快速开发
+Exec=aardio
+Type=Application
+StartupNotify=true
+Icon=aardio
+Categories=Development;
+StartupWMClass=aardio.exe
