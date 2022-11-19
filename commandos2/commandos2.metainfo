@@ -1,0 +1,16 @@
+# App 名称
+APP_NAME="commandos2"
+# App 中文名称
+APP_NAME_CN="盟军敢死队2勇往直前"
+# App 版本号
+APP_VERSION="1.0"
+# App 压缩包文件名
+APP_ARCHIVE="commandos2.tar.xz"
+# App 升级时需要忽略的文件列表
+APP_IGNORE=".appignore"
+# App 运行命令
+APP_RUN_CMD="C:\Commandos2MenOfCourage\开始游戏.exe"
+# App 运行时需要进入的路径
+APP_RUN_PATH="drive_c/Commandos2MenOfCourage"
+# App 运行时使用的 wine 版本号
+APP_RUN_WINE=""

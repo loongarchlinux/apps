@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Commandos2
+Name[zh_CN]=盟军敢死队2
+Comment=Commandos2
+Comment[zh_CN]=盟军敢死队2勇往直前
+Exec=commandos2
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=commandos2
+Categories=Game;
