@@ -14,8 +14,11 @@ source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/eaa675abee8f
     32.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('57c261e7cd264b5a8da773ca03acc6d2fa5fdee79dd7659a56018e96e4ac2c81'
-            '134254fd1dfc3314962d81214e5c931cf425f807e1b86597cd9b30344282bb82')
+sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
+            '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
+            '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
+            '992660e2b438473ff400fcca830ffb321def89a7fcf312c470e58d6cebb693fb'
+            'ca6b109729e7e1b7f2d7327ca52ecb2399d2edb6b4f0533b0d6ca364491bf8ad')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
@@ -37,13 +40,3 @@ EOF
     fi
   done
 }
-sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
-            '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
-            '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
-            'cf718b7faf9f67ba213d15edde9237ad850168308d593eeeb1451086197591cd'
-            'c9eb787d502d0d7fdffb7ce34567cdc1b78e433290ff15716f4d381a84172bc6')
-sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
-            '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
-            '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
-            'cf718b7faf9f67ba213d15edde9237ad850168308d593eeeb1451086197591cd'
-            'ca6b109729e7e1b7f2d7327ca52ecb2399d2edb6b4f0533b0d6ca364491bf8ad')
