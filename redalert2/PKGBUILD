@@ -1,0 +1,49 @@
+pkgname=redalert2
+pkgver=1.6
+pkgrel=1
+pkgdesc="Red Alert 2(红警2)"
+arch=('any')
+url="http://ra2.com"
+license=('custom')
+groups=('lat')
+depends=('wine')
+OPTIONS=(!strip)
+noextract=("$pkgname.tar.xz")
+source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/eaa675abee8fd8f53cac5bce29d7029e/$pkgname.tar.xz"
+    16.png
+    32.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('57c261e7cd264b5a8da773ca03acc6d2fa5fdee79dd7659a56018e96e4ac2c81'
+            '134254fd1dfc3314962d81214e5c931cf425f807e1b86597cd9b30344282bb82')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}
+sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
+            '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
+            '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
+            'cf718b7faf9f67ba213d15edde9237ad850168308d593eeeb1451086197591cd'
+            'c9eb787d502d0d7fdffb7ce34567cdc1b78e433290ff15716f4d381a84172bc6')
+sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
+            '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
+            '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
+            'cf718b7faf9f67ba213d15edde9237ad850168308d593eeeb1451086197591cd'
+            'ca6b109729e7e1b7f2d7327ca52ecb2399d2edb6b4f0533b0d6ca364491bf8ad')

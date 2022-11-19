@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Red Alert2
+Name[zh_CN]=红色警戒2 中国崛起
+Exec=redalert2
+Type=Application
+StartupNotify=true
+Icon=redalert2
+Categories=Player;Game;
