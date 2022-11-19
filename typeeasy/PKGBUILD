@@ -21,8 +21,8 @@ sha256sums=('4be522e861843ee232acecb9e1449a711d0dbee53e44801a6180729c17e6cbbe'
             '7f93582b17651e4d83c16d1e63d8464b65f333e8e09e584b056b90db58830f97'
             'eec64b8790a8eb7b1a94fd2ff2009889689fb0380f1224ac51aeea989ebabc2e'
             '5ec8579cadfeaac927fa42b7f753a1641f70f64e0375f8923260ba302bebdbc3'
-            '444a8219f04123245336508c3ec6cfb9cbda51d7151a75e00fcca1d20d82546f'
-            '88db1e7daf3bded68c587e679f8f6f154c3bae0a2fdca62ae9a6ac5ab5dee6e4')
+            '3af6b0052e3f7ba3d61531a5d74ed117051919b7f72b9eb16cc52553ab6d380b'
+            'b3486cb3700abca2b2c98428b802a94f7592e6a4d7dce309bf5cffb8f45c76d4')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
