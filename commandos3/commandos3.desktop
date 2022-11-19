@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Commandos3
+Name[zh_CN]=盟军敢死队3
+Comment=Commandos3
+Comment[zh_CN]=盟军敢死队3目标柏林
+Exec=commandos3
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=commandos3
+Categories=Game;
