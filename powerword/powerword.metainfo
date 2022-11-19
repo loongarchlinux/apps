@@ -1,0 +1,16 @@
+# App 名称
+APP_NAME="powerword"
+# App 中文名称,首次启动时需要显示
+APP_NAME_CN="金山词霸"
+# App 版本号
+APP_VERSION="2022.1.1.2"
+# App 压缩包文件名
+APP_ARCHIVE="powerword.tar.xz"
+# App 版本升级时需要忽略的文件列表
+APP_IGNORE=".appignore"
+# App 运行命令
+APP_RUN_CMD="PowerWord.exe"
+# App 运行时需要进入的路径
+APP_RUN_PATH="drive_c/Kingsoft/PowerWord2022/Kingsoft/Power Word 2022/2022.1.1.20/"
+# App 运行时使用的 wine 版本号，当需要使用与默认wine不同的版本时需要指定。
+APP_RUN_WINE=""

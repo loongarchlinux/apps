@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=PowerWord2022
+Name[zh_CN]=金山词霸2022
+Comment=PowerWord2022
+Comment[zh_CN]=在金山词霸2022，发现英文之美
+Exec=powerword
+Type=Application
+StartupNotify=true
+Icon=powerword
+Categories=Education
+StartupWMClass=powerword.exe
