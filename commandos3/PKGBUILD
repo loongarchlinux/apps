@@ -5,8 +5,8 @@ pkgdesc="Commandos3 Destination Berlin"
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
-groups=('lat')
-depends=('wine')
+groups=('wine-apps')
+depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname.tar.xz")
 source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/8d3cec8dbfc4916ff631e680b507fbe5/$pkgname.tar.xz"
@@ -15,12 +15,12 @@ source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/8d3cec8dbfc4
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('d1c2f410c790acd6bd237df68af9ace8b68325023b9e48cfe3b72ca059c57ab1'
+sha256sums=('3d783f19780816ef545322377513778ef1d35bea0c19f83ac012b5460d47cef9'
             '41866eb2222f584da262f46d0cc9fc69914cdc02d3da31a4d85e258e22683f86'
             '9046f02aecb23d9f1adc25c4c1d7137d8a2e7c22245197f2049c0dcf9c01b3ba'
             '05aa8c160a47e62b68afefcba57a73efcab9c7cd5f53c0abb309d3b3ebfee415'
             'c823f7f3521a65ea337b532e70fc5458f6fef243db3f02317f909117ccfa0578'
-            '3e5ac8a9446c3f7f1013e01f813da45c96a1a81a4366735fc3e89b4fc38997f0')
+            'ce6a439c14f843afb478d6cfc380419c2f4e15dfb8baf48068a0afde054ed936')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}

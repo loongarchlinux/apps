@@ -9,3 +9,4 @@ StartupNotify=true
 Terminal=false
 Icon=commandos3
 Categories=Game;
+StartupWMClass=commandos3.exe
