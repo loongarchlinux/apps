@@ -5,8 +5,8 @@ pkgdesc="Commandos2 Men Of Courage"
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
-groups=('lat')
-depends=('wine')
+groups=('wine-apps')
+depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname.tar.xz")
 source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/b5ea7994a35635299a6e7886c7511543/$pkgname.tar.xz"
@@ -15,12 +15,12 @@ source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/b5ea7994a356
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('66a38de25b1db5c7ea9640eab73c2fa83dc1f99c376d674f35abe03d0a7e8dfb'
+sha256sums=('1cf22189f237ec76833f9379e1b65e97ec6a6b76c3ca3da589d690d66e4f4bba'
             '4f2deebb9c1c9b5ed1a4e2c51c96fe35f9852bea5d714f93eabc49713e2045d4'
             'a7465ae284a48b7d5fe7155878533c76f549051f6d67b513976dcab6e4b184f2'
             '34de1e9fc20fa763196eec4975c9e5f45b599441673ca282b799f2c42fd23461'
             '488348439f02346d49fd0f9ba2a28efe96093907a3056c114eaea9c59f4c0e87'
-            'b77ce268078404758582b4ee495a4446829286fb882542bef9192f5e0fe63fef')
+            '4fdb5b0545d017a6206ebde0600ac2eb14523ff47ee5d266936a84f78ae617d8')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}

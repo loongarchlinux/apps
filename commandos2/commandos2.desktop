@@ -9,3 +9,4 @@ StartupNotify=true
 Terminal=false
 Icon=commandos2
 Categories=Game;
+StartupWMClass=commandos2.exe
