@@ -25,6 +25,9 @@ APP_DIR=$APP_TOP_DIR/$APP_NAME
 
 if [ -f $APP_DIR/$APP_NAME.metainfo ]; then
     source $APP_DIR/$APP_NAME.metainfo
+else
+    zenity --error --text="出错啦！" --text="找不到 $APP_DIR/$APP_NAME.metainfo 文件，请检查安装包是否正确"
+    exit
 fi
 
 #"""
