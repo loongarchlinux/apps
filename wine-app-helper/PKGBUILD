@@ -8,8 +8,8 @@ license=('GPL')
 depends=('wine' 'zenity')
 source=(wine-run
     wine-mkapp)
-sha256sums=('892d6faacbd5ef4bc3bfb60e479dc36380b14321e708e6655864fd6c0d5b300b'
-            '0da9133261005ca712712c75ea2104aa1293d783ea4479af5d1f21c41a770b8c')
+sha256sums=('ba7aa611332ece6ad11ef13fc4fe0ebb3ecd728991c0899548a35e8986fe1400'
+            '41ab2a23fbc667e8dfc8fedf8f44d6360f6f74ce7ec58aa63b9d3e8e6cbce2d7')
 
 package() {
   install -Dm755 $srcdir/wine-run ${pkgdir}/usr/bin/wine-run

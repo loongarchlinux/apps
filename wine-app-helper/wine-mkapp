@@ -113,3 +113,8 @@ EOF
   done
 }
 ENDLINE
+
+app_dir="/tmp/winapp.${pkgname}"
+mv $start_dir $app_dir
+
+echo "The app develop files is $app_dir"
