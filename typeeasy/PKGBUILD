@@ -9,14 +9,14 @@ groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/089b9c22872a265bbc2fd6946969ae48/$pkgname.tar.xz"
+source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/3740ea11a4e0e5ab07499d0bc2a41205/$pkgname.tar.xz"
     16.png
     256.png
     32.png
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('4be522e861843ee232acecb9e1449a711d0dbee53e44801a6180729c17e6cbbe'
+sha256sums=('c640760537fccb6b00e6f766271676e211a0c2c5b0b839e16747649c6f0a08ba'
             'ab3f9192d9a3469f949b235a4012e43fabb9c0ec1378b162ed3d50359a45c94b'
             '7f93582b17651e4d83c16d1e63d8464b65f333e8e09e584b056b90db58830f97'
             'eec64b8790a8eb7b1a94fd2ff2009889689fb0380f1224ac51aeea989ebabc2e'
