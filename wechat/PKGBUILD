@@ -1,0 +1,54 @@
+pkgname=wechat
+pkgver=1.0
+pkgrel=1
+pkgdesc="wechat"
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('lat')
+#depends=('wine7.20')
+OPTIONS=(!strip)
+noextract=("$pkgname.tar.xz")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/93b85262d9a89a37a37d4ec554778c58/$pkgname.tar.xz"
+    16.png
+    24.png
+    32.png
+    48.png
+    64.png
+    96.png
+    128.png
+    256.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('633ecf970418421924688954e2fba518febf7ad8bcade6d14e6ffc1cc16db24d'
+            '009a08143d266a6c8616080984162198653246787011a07551537555d47e7b5f'
+            '85a3e7cf892cf6db0052b8eeccb24402396176109a28e0644b0840c2b7f4f17d'
+            '93eee88197baa3bf59a93a96d55ad8597f8fd068969f0135b376247d7a9cdbb4'
+            '372ba8cab51387178ea1c389c9ba4a66df279af390085c0f499cddbc41000fc8'
+            '383799e6e3c18e66c02445f49633b99fd0cc4508ce72afbf979b91233959f0a0'
+            '484e68d64729a4fbd8737080db3fd11794a2f3a2b38955868b256cfc9456a5ec'
+            '1d8599cee1f6cf5f2223a4000dbeea972da8196ea215045eef39582af42f8471'
+            '75f7c75c0a6329089296071cad40ff6e380ba115775f22ad79d71e53da37fb30'
+            '2b30d4e7f7b05c4ef89bf6d2037dbc4d9c6d54ca1452213439752b000d21a8e0'
+            '54853528471907e3bc1540f4c1905ef05c8c81b4ac2f7dcab08124c552616aa2')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}
