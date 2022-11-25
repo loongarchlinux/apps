@@ -78,7 +78,7 @@ fix_disk_link()
 {
     if [ -d $WINEPREFIX ];then
         pushd "$WINEPREFIX/dosdevices" >/dev/null
-        rm c: z:
+        rm -f c: z:
         ln -sf ../drive_c c:
         ln -sf / z:
         popd > /dev/null
@@ -89,7 +89,25 @@ app_install()
 {
     mkdir -p $WINEPREFIX
     tar xf $APP_DIR/$APP_ARCHIVE -C $WINEPREFIX
-    mv "$WINEPREFIX/drive_c/users/@current_user@" "$WINEPREFIX/drive_c/users/$USER"
+    if [ -d "$WINEPREFIX/drive_c/users/@current_user@" ]; then
+        mv "$WINEPREFIX/drive_c/users/@current_user@" "$WINEPREFIX/drive_c/users/$USER"
+        if [ -f $HOME/.config/user-dirs.dirs ]; then
+            source $HOME/.config/user-dirs.dirs
+            ln -sf $XDG_DESKTOP_DIR $WINEPREFIX/drive_c/users/$USER/Desktop
+            ln -sf $XDG_DOWNLOAD_DIR $WINEPREFIX/drive_c/users/$USER/Downloads
+            ln -sf $XDG_DOCUMENTS_DIR $WINEPREFIX/drive_c/users/$USER/Documents
+            ln -sf $XDG_MUSIC_DIR $WINEPREFIX/drive_c/users/$USER/Music
+            ln -sf $XDG_PICTURES_DIR $WINEPREFIX/drive_c/users/$USER/Pictures
+            ln -sf $XDG_VIDEOS_DIR $WINEPREFIX/drive_c/users/$USER/Videos
+        else
+            ln -sf /home/$USER/桌面 $WINEPREFIX/drive_c/users/$USER/Desktop
+            ln -sf /home/$USER/文档 $WINEPREFIX/drive_c/users/$USER/Documents
+            ln -sf /home/$USER/下载 $WINEPREFIX/drive_c/users/$USER/Downloads
+            ln -sf /home/$USER/音乐 $WINEPREFIX/drive_c/users/$USER/Music
+            ln -sf /home/$USER/图片 $WINEPREFIX/drive_c/users/$USER/Pictures
+            ln -sf /home/$USER/视频 $WINEPREFIX/drive_c/users/$USER/Videos
+        fi
+    fi
     sed -i "s#@current_user@#$USER#g" $WINEPREFIX/*.reg
     echo "$APP_VERSION" > "$WINEPREFIX/app_version"
     fix_disk_link
@@ -101,10 +119,25 @@ app_update()
         return
     fi
 
+    if [ ! -f $APP_IGNORE ]; then
+        APP_IGNORE=`mktemp /tmp/.appignore.XXXX`
+        cat > $APP_IGNORE << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+    fi
     tar xf $APP_DIR/$APP_ARCHIVE -C $WINEPREFIX --exclude-from=$APP_IGNORE
+    rm -f $APP_IGNORE
 
     if [ -d "$WINEPREFIX/drive_c/users/@current_user@" ]; then
-        rm -rf "$WINEPREFIX/drive_c/users/@current_user@"
+        mv "$WINEPREFIX/drive_c/users/@current_user@" "$WINEPREFIX/drive_c/users/$USER"
+        ln -sf /home/$USER/桌面 $WINEPREFIX/drive_c/users/$USER/Desktop
+        ln -sf /home/$USER/文档 $WINEPREFIX/drive_c/users/$USER/Documents
+        ln -sf /home/$USER/下载 $WINEPREFIX/drive_c/users/$USER/Downloads
+        ln -sf /home/$USER/音乐 $WINEPREFIX/drive_c/users/$USER/Music
+        ln -sf /home/$USER/图片 $WINEPREFIX/drive_c/users/$USER/Pictures
+        ln -sf /home/$USER/视频 $WINEPREFIX/drive_c/users/$USER/Videos
     fi
 
     echo "$APP_VERSION" > "$WINEPREFIX/app_version"

@@ -28,10 +28,32 @@ if [ ! -d $prefix_dir/drive_c ]; then
 fi
 
 cp -a $prefix_dir $start_dir
+
+# USER name
 sed -i "s#$USER#@current_user@#g" $app_dir/*.reg
 if [ -d $app_dir/drive_c/users/$USER ]; then
-  mv $app_dir/drive_c/users/$USER $app_dir/drive_c/users/@current_user@
+    rm -f $app_dir/drive_c/users/$USER/Desktop
+    rm -f $app_dir/drive_c/users/$USER/Documents
+    rm -f $app_dir/drive_c/users/$USER/Downloads
+    rm -f $app_dir/drive_c/users/$USER/Music
+    rm -f $app_dir/drive_c/users/$USER/Pictures
+    rm -f $app_dir/drive_c/users/$USER/Videos
+    mv $app_dir/drive_c/users/$USER $app_dir/drive_c/users/@current_user@
 fi
+
+# Clean cache
+if [ -d $app_dir/drive_c/users/$USER/AppData/Local/Microsoft/Windows/INetCache ]; then
+    rm -rf $app_dir/drive_c/users/$USER/AppData/Local/Microsoft/Windows/INetCache/*
+fi
+if [ -d $app_dir/drive_c/users/$USER/Temp ]; then
+    rm -rf $app_dir/drive_c/users/$USER/Temp/*
+fi
+
+# Clean Tencent
+if [ -d $app_dir/drive_c/users/$USER/AppData/Roaming/Tencent ]; then
+    rm -rf $app_dir/drive_c/users/$USER/AppData/Roaming/Tencent
+fi
+
 ( cd $app_dir; tar -Jcf $start_dir/$name.tar.xz *)
 
 cat > $start_dir/$name.metainfo << EOF

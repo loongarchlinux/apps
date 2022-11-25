@@ -15,3 +15,5 @@ package() {
   install -Dm755 $srcdir/wine-run ${pkgdir}/usr/bin/wine-run
   install -Dm755 $srcdir/wine-mkapp ${pkgdir}/usr/bin/wine-mkapp
 }
+sha256sums=('6c2efc3b5733a983ea56c0e2a585c2a33bd3638222662e1650964a6e16f344e6'
+            'b2079b5edbc73614edd73cd6c90d82bf3ca7e3e77e48735a26c29c47dc163073')
