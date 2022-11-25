@@ -1,6 +1,6 @@
 pkgname=wechat
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="wechat"
 arch=('any')
 url="http://www.unkonwn.com"
@@ -9,7 +9,7 @@ groups=('lat')
 #depends=('wine7.20')
 OPTIONS=(!strip)
 noextract=("$pkgname.tar.xz")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/93b85262d9a89a37a37d4ec554778c58/$pkgname.tar.xz"
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/2ff794b4fff60b23561699a20b172b75/$pkgname.tar.xz"
     16.png
     24.png
     32.png
@@ -20,7 +20,7 @@ source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/93b85262d
     256.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('633ecf970418421924688954e2fba518febf7ad8bcade6d14e6ffc1cc16db24d'
+sha256sums=('b23319888976e591c9f30bde0eb825dc1dcf3b9e8f8a8f81f15bf9e6dd6ee84d'
             '009a08143d266a6c8616080984162198653246787011a07551537555d47e7b5f'
             '85a3e7cf892cf6db0052b8eeccb24402396176109a28e0644b0840c2b7f4f17d'
             '93eee88197baa3bf59a93a96d55ad8597f8fd068969f0135b376247d7a9cdbb4'
