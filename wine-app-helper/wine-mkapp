@@ -7,11 +7,67 @@
 #
 # @description : 从.wine容器生成可安装的app目录
 ######################################################################
+set -x
+
+FAKE_USER="@current_user@"
 
 usage()
 {
   echo $0 "<WINE_PREFIX_DIRECTORY>"
   exit 0
+}
+
+get_win_user()
+{
+  local prefix=$1
+  local users len user
+  users=$(ls $prefix/drive_c/users)
+  users=( ${users[@]/Public/} )
+  len=${#users[@]}
+  if [ $len -eq 1 ]; then
+    user=${users[0]}
+  fi
+
+  if [ "x$user" != "x$FAKE_USER" ]; then
+    echo $user
+  elif [ -f $prefix/user.reg ]; then
+    grep USERNAME $prefix/user.reg | awk -F= '{print $2}' |sed 's/"//g'
+  else
+    echo $USER
+  fi
+}
+
+clean()
+{
+  local prefix=$1
+  local win_user=`get_win_user $prefix`
+
+  # regedit
+  for i in system userdef user; do
+    sed -i "s#home\\\\\\\\$win_user#home\\\\\\\\$FAKE_USER#g" $prefix/$i.reg
+    sed -i "s#users\\\\\\\\$win_user#users\\\\\\\\$FAKE_USER#g" $prefix/$i.reg
+  done
+  sed -i "s#\"USERNAME\"=\"$win_user\"#\"USERNAME\"=\"$FAKE_USER\"#" $prefix/user.reg
+
+  # remove the linked directories
+  for i in "Desktop" "Documents" "Downloads" "Music" "Pictures" "Videos" \
+    "Temp" "Searches" "Saved Games" "Links" "Contacts" "Favorites" "AppData"; do
+    if [ -d "$prefix/drive_c/users/$win_user/$i" ]; then
+      rm -rf "$prefix/drive_c/users/$win_user/$i"
+    elif [ -L "$prefix/drive_c/users/$win_user/$i" ]; then
+      rm -f "$prefix/drive_c/users/$win_user/$i"
+    fi
+  done
+
+  for i in .update-timestamp winetricks.log; do
+    if [ -f $prefix/${i} ]; then
+      rm $prefix/${i}
+    fi
+  done
+
+  # remove dosdevices directory
+  rm -rf $prefix/dosdevices
+  mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
 }
 
 if [ $# -ne 1 ];then
@@ -21,7 +77,7 @@ fi
 prefix_dir=`realpath $1`
 name=`basename $prefix_dir`
 start_dir=`mktemp -d /tmp/winapp.XXXX`
-app_dir=$start_dir/$name
+app_dir="/tmp/winapp.${name}"
 
 if [ ! -d $prefix_dir/drive_c ]; then
   exit
@@ -29,32 +85,9 @@ fi
 
 cp -a $prefix_dir $start_dir
 
-# USER name
-sed -i "s#$USER#@current_user@#g" $app_dir/*.reg
-if [ -d $app_dir/drive_c/users/$USER ]; then
-    rm -f $app_dir/drive_c/users/$USER/Desktop
-    rm -f $app_dir/drive_c/users/$USER/Documents
-    rm -f $app_dir/drive_c/users/$USER/Downloads
-    rm -f $app_dir/drive_c/users/$USER/Music
-    rm -f $app_dir/drive_c/users/$USER/Pictures
-    rm -f $app_dir/drive_c/users/$USER/Videos
-    mv $app_dir/drive_c/users/$USER $app_dir/drive_c/users/@current_user@
-fi
+clean $start_dir/$name
 
-# Clean cache
-if [ -d $app_dir/drive_c/users/$USER/AppData/Local/Microsoft/Windows/INetCache ]; then
-    rm -rf $app_dir/drive_c/users/$USER/AppData/Local/Microsoft/Windows/INetCache/*
-fi
-if [ -d $app_dir/drive_c/users/$USER/Temp ]; then
-    rm -rf $app_dir/drive_c/users/$USER/Temp/*
-fi
-
-# Clean Tencent
-if [ -d $app_dir/drive_c/users/$USER/AppData/Roaming/Tencent ]; then
-    rm -rf $app_dir/drive_c/users/$USER/AppData/Roaming/Tencent
-fi
-
-( cd $app_dir; tar -Jcf $start_dir/$name.tar.xz *)
+( cd $start_dir/$name; tar -Jcf $start_dir/$name.tar.xz *)
 
 cat > $start_dir/$name.metainfo << EOF
 # App 名称
@@ -98,7 +131,7 @@ pkgdesc="$name"
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
-groups=('lat')
+groups=('wine-apps')
 depends=('wine')
 OPTIONS=(!strip)
 noextract=("\$pkgname.tar.xz")
@@ -108,6 +141,7 @@ source=("http://loongarch.zhcn.cc/sources/wine-apps/\$pkgname.tar.xz//\$pkgname.
     32.png
     48.png
     64.png
+    96.png
     128.png
     256.png
     \$pkgname.metainfo
@@ -136,7 +170,6 @@ EOF
 }
 ENDLINE
 
-app_dir="/tmp/winapp.${pkgname}"
 mv $start_dir $app_dir
 
 echo "The app develop files is $app_dir"

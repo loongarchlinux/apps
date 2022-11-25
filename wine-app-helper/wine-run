@@ -11,6 +11,7 @@
 
 APP_TOP_DIR="/opt/wine-apps"
 WINE_DIR_PREFIX="/opt/wine"
+FAKE_USER="@current_user@"
 
 # App 名称
 APP_NAME=$(basename $0)
@@ -33,6 +34,7 @@ OPT_RESET=n
 OPT_HELP=n
 
 APP_DIR=$APP_TOP_DIR/$APP_NAME
+WINEPREDLL="$APP_DIR/lib"
 
 if [ -f $APP_DIR/$APP_NAME.metainfo ]; then
     source $APP_DIR/$APP_NAME.metainfo
@@ -41,20 +43,16 @@ else
     exit
 fi
 
-WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
-export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
-export WINEPREDLL="$APP_DIR/lib"
-export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
-WINE_CMD="wine"
 
-if [ "x$APP_RUN_WINE" != "x" ] && [ -x $WINE_DIR/bin/wine ]; then
+if [ "x$APP_RUN_WINE" != "x" ] && [ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]; then
+    WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
     WINE_CMD=$WINE_DIR/bin/wine
+    export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
+else
+    WINE_CMD="wine"
 fi
 
-app_uninstall()
-{
-    rm -rf $WINEPREFIX
-}
+export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
 
 usage()
 {
@@ -74,72 +72,132 @@ Option:
 ENDLINE
 }
 
-fix_disk_link()
+app_fix()
 {
-    if [ -d $WINEPREFIX ];then
-        pushd "$WINEPREFIX/dosdevices" >/dev/null
-        rm -f c: z:
-        ln -sf ../drive_c c:
-        ln -sf / z:
-        popd > /dev/null
-    fi
+  local prefix=$1
+
+  # regedit
+  for i in system userdef user; do
+    sed -i "s#home\\\\\\\\$FAKE_USER#home\\\\\\\\$USER#g" $prefix/$i.reg
+    sed -i "s#users\\\\\\\\$FAKE_USER#users\\\\\\\\$USER#g" $prefix/$i.reg
+  done
+  sed -i "s#\"USERNAME\"=\"$FAKE_USER\"#\"USERNAME\"=\"$USER\"#" $prefix/user.reg
+
+  if [ -d "$prefix/drive_c/users/$FAKE_USER" ]; then
+      mv "$prefix/drive_c/users/$FAKE_USER" "$prefix/drive_c/users/$USER"
+
+      mkdir -p "$prefix/drive_c/users/$USER/Searches"
+      mkdir -p "$prefix/drive_c/users/$USER/Saved Games"
+      mkdir -p "$prefix/drive_c/users/$USER/Links"
+      mkdir -p "$prefix/drive_c/users/$USER/Contacts"
+      mkdir -p "$prefix/drive_c/users/$USER/Favorites"
+      mkdir -p "$prefix/drive_c/users/$USER/AppData"
+
+      if [ -f $HOME/.config/user-dirs.dirs ]; then
+          source $HOME/.config/user-dirs.dirs
+          ln -sf $XDG_DESKTOP_DIR $prefix/drive_c/users/$USER/Desktop
+          ln -sf $XDG_DOWNLOAD_DIR $prefix/drive_c/users/$USER/Downloads
+          ln -sf $XDG_DOCUMENTS_DIR $prefix/drive_c/users/$USER/Documents
+          ln -sf $XDG_MUSIC_DIR $prefix/drive_c/users/$USER/Music
+          ln -sf $XDG_PICTURES_DIR $prefix/drive_c/users/$USER/Pictures
+          ln -sf $XDG_VIDEOS_DIR $prefix/drive_c/users/$USER/Videos
+      else
+          if [ -d /home/$USER/桌面 ]; then
+              ln -sf /home/$USER/桌面 $prefix/drive_c/users/$USER/Desktop
+          elif [ -d /home/$USER/Desktop ]; then
+              ln -sf /home/$USER/Desktop $prefix/drive_c/users/$USER/Desktop
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Desktop
+          fi
+
+          if [ -d /home/$USER/文档 ]; then
+              ln -sf /home/$USER/文档 $prefix/drive_c/users/$USER/Documents
+          elif [ -d /home/$USER/Documents ]; then
+              ln -sf /home/$USER/Documents $prefix/drive_c/users/$USER/Documents
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Documents
+          fi
+
+          if [ -d /home/$USER/下载 ]; then
+              ln -sf /home/$USER/下载 $prefix/drive_c/users/$USER/Downloads
+          elif [ -d /home/$USER/Downloads ]; then
+              ln -sf /home/$USER/Downloads $prefix/drive_c/users/$USER/Downloads
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Downloads
+          fi
+
+          if [ -d /home/$USER/音乐 ]; then
+              ln -sf /home/$USER/音乐 $prefix/drive_c/users/$USER/Music
+          elif [ -d /home/$USER/Music ]; then
+              ln -sf /home/$USER/Music $prefix/drive_c/users/$USER/Music
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Music
+          fi
+
+          if [ -d /home/$USER/图片 ]; then
+              ln -sf /home/$USER/图片 $prefix/drive_c/users/$USER/Pictures
+          elif [ -d /home/$USER/Pictures ]; then
+              ln -sf /home/$USER/Pictures $prefix/drive_c/users/$USER/Pictures
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Pictures
+          fi
+
+          if [ -d /home/$USER/视频 ]; then
+              ln -sf /home/$USER/视频 $prefix/drive_c/users/$USER/Videos
+          elif [ -d /home/$USER/Videos ]; then
+              ln -sf /home/$USER/Videos $prefix/drive_c/users/$USER/Videos
+          else
+              mkdir -p $prefix/drive_c/users/$USER/Videos
+          fi
+      fi
+  fi
+
+  if [ ! -d $prefix/dosdevices ]; then
+      mkdir -p $prefix/dosdevices/
+      ln -sf ../drive_c $prefix/dosdevices/c:
+      ln -sf / $prefix/dosdevices/z:
+      for i in `seq 0 15`; do
+          if [ -c /dev/ttyS${i} ]; then
+              ln -sf /dev/ttyS${i} $prefix/dosdevices/com$(( $i+1 ))
+          fi
+      done
+  fi
 }
 
 app_install()
 {
+    if [ -d $WINEPREFIX ] && [ -d $WINEPREFIX/drive_c ]; then
+        return
+    fi
+
     mkdir -p $WINEPREFIX
     tar xf $APP_DIR/$APP_ARCHIVE -C $WINEPREFIX
-    if [ -d "$WINEPREFIX/drive_c/users/@current_user@" ]; then
-        mv "$WINEPREFIX/drive_c/users/@current_user@" "$WINEPREFIX/drive_c/users/$USER"
-        if [ -f $HOME/.config/user-dirs.dirs ]; then
-            source $HOME/.config/user-dirs.dirs
-            ln -sf $XDG_DESKTOP_DIR $WINEPREFIX/drive_c/users/$USER/Desktop
-            ln -sf $XDG_DOWNLOAD_DIR $WINEPREFIX/drive_c/users/$USER/Downloads
-            ln -sf $XDG_DOCUMENTS_DIR $WINEPREFIX/drive_c/users/$USER/Documents
-            ln -sf $XDG_MUSIC_DIR $WINEPREFIX/drive_c/users/$USER/Music
-            ln -sf $XDG_PICTURES_DIR $WINEPREFIX/drive_c/users/$USER/Pictures
-            ln -sf $XDG_VIDEOS_DIR $WINEPREFIX/drive_c/users/$USER/Videos
-        else
-            ln -sf /home/$USER/桌面 $WINEPREFIX/drive_c/users/$USER/Desktop
-            ln -sf /home/$USER/文档 $WINEPREFIX/drive_c/users/$USER/Documents
-            ln -sf /home/$USER/下载 $WINEPREFIX/drive_c/users/$USER/Downloads
-            ln -sf /home/$USER/音乐 $WINEPREFIX/drive_c/users/$USER/Music
-            ln -sf /home/$USER/图片 $WINEPREFIX/drive_c/users/$USER/Pictures
-            ln -sf /home/$USER/视频 $WINEPREFIX/drive_c/users/$USER/Videos
-        fi
-    fi
-    sed -i "s#@current_user@#$USER#g" $WINEPREFIX/*.reg
+    app_fix $WINEPREFIX
     echo "$APP_VERSION" > "$WINEPREFIX/app_version"
-    fix_disk_link
 }
 
 app_update()
 {
+    local app_ignore
     if [ -f "$WINEPREFIX/app_version" ] && [ "$(cat "$WINEPREFIX/app_version")" = "$APP_VERSION" ]; then
         return
     fi
 
-    if [ ! -f $APP_IGNORE ]; then
-        APP_IGNORE=`mktemp /tmp/.appignore.XXXX`
-        cat > $APP_IGNORE << EOF
+    if [ -f $APP_DIR/$APP_IGNORE ]; then
+        app_ignore=$APP_DIR/$APP_IGNORE
+    else
+        app_ignore=`mktemp /tmp/.appignore.XXXX`
+        cat > $app_ignore << EOF
 user.reg
 userdef.reg
 system.reg
 EOF
     fi
-    tar xf $APP_DIR/$APP_ARCHIVE -C $WINEPREFIX --exclude-from=$APP_IGNORE
-    rm -f $APP_IGNORE
 
-    if [ -d "$WINEPREFIX/drive_c/users/@current_user@" ]; then
-        mv "$WINEPREFIX/drive_c/users/@current_user@" "$WINEPREFIX/drive_c/users/$USER"
-        ln -sf /home/$USER/桌面 $WINEPREFIX/drive_c/users/$USER/Desktop
-        ln -sf /home/$USER/文档 $WINEPREFIX/drive_c/users/$USER/Documents
-        ln -sf /home/$USER/下载 $WINEPREFIX/drive_c/users/$USER/Downloads
-        ln -sf /home/$USER/音乐 $WINEPREFIX/drive_c/users/$USER/Music
-        ln -sf /home/$USER/图片 $WINEPREFIX/drive_c/users/$USER/Pictures
-        ln -sf /home/$USER/视频 $WINEPREFIX/drive_c/users/$USER/Videos
-    fi
+    tar xf $APP_DIR/$APP_ARCHIVE -C $WINEPREFIX --exclude-from=$app_ignore
+    rm -f $app_ignore
 
+    app_fix $WINEPREFIX
     echo "$APP_VERSION" > "$WINEPREFIX/app_version"
 }
 
@@ -149,6 +207,7 @@ app_run()
     if [ "x$APP_NAME_CN" != "x" ];then
         name=$APP_NAME_CN
     fi
+
     if [ ! -d "$WINEPREFIX" ]; then
         app_install | progressbar $name "首次启动，初始化$name中..."
     else
@@ -158,7 +217,8 @@ app_run()
         cd "$WINEPREFIX/$APP_RUN_PATH"
         exec $WINE_CMD $APP_RUN_CMD
     else
-        exec $WINE_CMD "$WINEPREFIX/$APP_RUN_CMD"
+        cd "$WINEPREFIX"
+        exec $WINE_CMD "$APP_RUN_CMD"
     fi
 }
 
@@ -247,7 +307,7 @@ if [ $APP_NAME == "wine-run" ]; then
 fi
 
 if [ "x${OPT_RESET}" == "xy" ]; then
-    app_uninstall
+    rm -rf $WINEPREFIX
     exit
 fi
 app_run
