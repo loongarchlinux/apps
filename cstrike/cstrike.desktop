@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=cstrike
 Name[zh_CN]=CS 1.6
+Comment=cstrike
+Comment[zh_CN]=cstrike
 Exec=cstrike
 Type=Application
 StartupNotify=true
+Terminal=false
 Icon=cstrike
 Categories=Player;Game;
 StartupWMClass=cstrike.exe

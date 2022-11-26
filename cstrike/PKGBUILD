@@ -1,24 +1,24 @@
 pkgname=cstrike
 pkgver=1.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Counter Strike"
 arch=('any')
-url="http://unknown.com"
+url="http://www.unkonwn.com"
 license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/94375b90a991d6f5b732cfbd98abc39c/$pkgname.tar.xz"
-        16.png
-        32.png
-        $pkgname.metainfo
-        $pkgname.desktop)
-sha256sums=('914f53716dd3c82eb367cb3dbdbd7aba3d11cfa5486e720f7b99d5a6a24b4fe4'
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/d3ec25e75a8e0957cb3e8d26dacdbaf4/$pkgname.tar.zst"
+    16.png
+    32.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('b0025415d56aae6d6176824302748716a8c20acce58e6ce00b22560dc83c2258'
             '4be71475f6f04f7e56febb2de5586081dec0746b6ff94ea40daf53b0228563e5'
             '098721a4c790ba48b5178336bbc0c74d0b749b0fd85beeaadea4202546e0b25b'
-            '272767e26b566665f4455d52a486d689941d36ba17cec17cc08202eedeec4648'
-            'c04077e64dc6d6d1d45bd6399d81780c34bc97f05c845fd39621c5ba8a5868cb')
+            '631c13d1209dc6ae0d4c7aa831ff8b33f067a470515156a514aac869beaeb078'
+            '80dd562262588d459a51812fb2b6e4502e27f7d09ca5854d2b4c7206d02dc934')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
@@ -29,12 +29,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
