@@ -6,6 +6,7 @@ Comment[zh_CN]=在金山词霸2022，发现英文之美
 Exec=powerword
 Type=Application
 StartupNotify=true
+Terminal=false
 Icon=powerword
 Categories=Education
 StartupWMClass=powerword.exe

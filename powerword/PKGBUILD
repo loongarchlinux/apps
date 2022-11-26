@@ -1,6 +1,6 @@
 pkgname=powerword
 pkgver=2022.1.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="PowerWord(金山词霸)"
 arch=('any')
 url="http://cp.iciba.com"
@@ -8,8 +8,8 @@ license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/aefea8c7dfb446701d4f7eb434defe1c/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst//$pkgname.tar.zst"
     16.png
     32.png
     48.png
@@ -18,15 +18,15 @@ source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/aefea8c7dfb4
     256.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('ca6250ceee344079b611e09b03737477481e1c66f756f0c9169571cae20861ad'
+sha256sums=('82524160f21b323de0f2e58057361c665230fdf63a639d3eef3920dc8a55e41e'
             '994a3158f0e66b104c5d0753e8a248324c1ad2abaff5e28fecbbeddfa528343f'
             '8e5eeae94ce7d6bee6043fb02693fc29ec454f3a6bb50ed1a306fc574b2a56a0'
             '01e890f3e03e3215f6018d5fc2b78a4edb56e50cedcd333b81c0ddfcadfc4c0c'
             '408ab37defd5a320e1cb8ad7fe2867cbe44107ecf63cf07606d6cce00cdfcf9c'
             '0ec2b5b448c58c44a4af75fa3178d3b9713deacb3d469008d0078ccece1b4300'
             'a0ee1651b1474bd5a4ab237ebcccaaa5545f5558b70f63b4018f2d8cfe980521'
-            '7d285ab5fa250e1223821fead4cc1c622ebc97754f38025310b25935f9f63aa2'
-            '3c32a6460c1a9fe869502c29e86d28dbe818497d410eaad91d2bcbae7d51fa3b')
+            '7bbe984a4a8e8b93d9cdb176d8b44255fb067c3e90be958f069175be579de349'
+            '11e9f1be48e763d7402ae7be953fca8d7fc9c7d3e91953e2c4c348c3d4ff72b4')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
@@ -37,12 +37,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 64 128 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
