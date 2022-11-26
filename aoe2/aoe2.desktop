@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Age Of Empires2
+Name[zh_CN]=帝国时代2
+Comment=The Age Of King
+Comment[zh_CN]=征服者 中文版
+Exec=aoe2
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=aoe2
+Categories=Game;
+StartupWMClass=aoe2.exe
