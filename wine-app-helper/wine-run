@@ -83,72 +83,84 @@ app_fix()
   done
   sed -i "s#\"USERNAME\"=\"$FAKE_USER\"#\"USERNAME\"=\"$USER\"#" $prefix/user.reg
 
-  if [ -d "$prefix/drive_c/users/$FAKE_USER" ]; then
+  # Public User
+  if [ ! -d "$prefix/drive_c/users/Public" ]; then
+      mkdir -p "$prefix/drive_c/users/Public"
+      for i in Desktop Documents Downloads Music Pictures Videos; do
+          mkdir -p "$prefix/drive_c/users/Public/$i"
+      done
+  fi
+
+  # Normal User
+  if [ ! -d "$prefix/drive_c/users/$FAKE_USER" ]; then
+      mkdir -p "$prefix/drive_c/users/$USER"
+  else
       mv "$prefix/drive_c/users/$FAKE_USER" "$prefix/drive_c/users/$USER"
+  fi
 
-      mkdir -p "$prefix/drive_c/users/$USER/Searches"
-      mkdir -p "$prefix/drive_c/users/$USER/Saved Games"
-      mkdir -p "$prefix/drive_c/users/$USER/Links"
-      mkdir -p "$prefix/drive_c/users/$USER/Contacts"
-      mkdir -p "$prefix/drive_c/users/$USER/Favorites"
-      mkdir -p "$prefix/drive_c/users/$USER/AppData"
+  mkdir -p "$prefix/drive_c/users/$USER/AppData"
+  mkdir -p "$prefix/drive_c/users/$USER/Contacts"
+  mkdir -p "$prefix/drive_c/users/$USER/Favorites"
+  mkdir -p "$prefix/drive_c/users/$USER/Links"
+  mkdir -p "$prefix/drive_c/users/$USER/Saved Games"
+  mkdir -p "$prefix/drive_c/users/$USER/Searches"
+  mkdir -p "$prefix/drive_c/users/$USER/Temp"
 
-      if [ -f $HOME/.config/user-dirs.dirs ]; then
-          source $HOME/.config/user-dirs.dirs
-          ln -sf $XDG_DESKTOP_DIR $prefix/drive_c/users/$USER/Desktop
-          ln -sf $XDG_DOWNLOAD_DIR $prefix/drive_c/users/$USER/Downloads
-          ln -sf $XDG_DOCUMENTS_DIR $prefix/drive_c/users/$USER/Documents
-          ln -sf $XDG_MUSIC_DIR $prefix/drive_c/users/$USER/Music
-          ln -sf $XDG_PICTURES_DIR $prefix/drive_c/users/$USER/Pictures
-          ln -sf $XDG_VIDEOS_DIR $prefix/drive_c/users/$USER/Videos
+  if [ -f $HOME/.config/user-dirs.dirs ]; then
+      source $HOME/.config/user-dirs.dirs
+      ln -sf $XDG_DESKTOP_DIR $prefix/drive_c/users/$USER/Desktop
+      ln -sf $XDG_DOWNLOAD_DIR $prefix/drive_c/users/$USER/Downloads
+      ln -sf $XDG_DOCUMENTS_DIR $prefix/drive_c/users/$USER/Documents
+      ln -sf $XDG_MUSIC_DIR $prefix/drive_c/users/$USER/Music
+      ln -sf $XDG_PICTURES_DIR $prefix/drive_c/users/$USER/Pictures
+      ln -sf $XDG_VIDEOS_DIR $prefix/drive_c/users/$USER/Videos
+  else
+      if [ -d /home/$USER/桌面 ]; then
+          ln -sf /home/$USER/桌面 $prefix/drive_c/users/$USER/Desktop
+      elif [ -d /home/$USER/Desktop ]; then
+          ln -sf /home/$USER/Desktop $prefix/drive_c/users/$USER/Desktop
       else
-          if [ -d /home/$USER/桌面 ]; then
-              ln -sf /home/$USER/桌面 $prefix/drive_c/users/$USER/Desktop
-          elif [ -d /home/$USER/Desktop ]; then
-              ln -sf /home/$USER/Desktop $prefix/drive_c/users/$USER/Desktop
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Desktop
-          fi
+          mkdir -p $prefix/drive_c/users/$USER/Desktop
+      fi
 
-          if [ -d /home/$USER/文档 ]; then
-              ln -sf /home/$USER/文档 $prefix/drive_c/users/$USER/Documents
-          elif [ -d /home/$USER/Documents ]; then
-              ln -sf /home/$USER/Documents $prefix/drive_c/users/$USER/Documents
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Documents
-          fi
+      if [ -d /home/$USER/文档 ]; then
+          ln -sf /home/$USER/文档 $prefix/drive_c/users/$USER/Documents
+      elif [ -d /home/$USER/Documents ]; then
+          ln -sf /home/$USER/Documents $prefix/drive_c/users/$USER/Documents
+      else
+          mkdir -p $prefix/drive_c/users/$USER/Documents
+      fi
 
-          if [ -d /home/$USER/下载 ]; then
-              ln -sf /home/$USER/下载 $prefix/drive_c/users/$USER/Downloads
-          elif [ -d /home/$USER/Downloads ]; then
-              ln -sf /home/$USER/Downloads $prefix/drive_c/users/$USER/Downloads
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Downloads
-          fi
+      if [ -d /home/$USER/下载 ]; then
+          ln -sf /home/$USER/下载 $prefix/drive_c/users/$USER/Downloads
+      elif [ -d /home/$USER/Downloads ]; then
+          ln -sf /home/$USER/Downloads $prefix/drive_c/users/$USER/Downloads
+      else
+          mkdir -p $prefix/drive_c/users/$USER/Downloads
+      fi
 
-          if [ -d /home/$USER/音乐 ]; then
-              ln -sf /home/$USER/音乐 $prefix/drive_c/users/$USER/Music
-          elif [ -d /home/$USER/Music ]; then
-              ln -sf /home/$USER/Music $prefix/drive_c/users/$USER/Music
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Music
-          fi
+      if [ -d /home/$USER/音乐 ]; then
+          ln -sf /home/$USER/音乐 $prefix/drive_c/users/$USER/Music
+      elif [ -d /home/$USER/Music ]; then
+          ln -sf /home/$USER/Music $prefix/drive_c/users/$USER/Music
+      else
+          mkdir -p $prefix/drive_c/users/$USER/Music
+      fi
 
-          if [ -d /home/$USER/图片 ]; then
-              ln -sf /home/$USER/图片 $prefix/drive_c/users/$USER/Pictures
-          elif [ -d /home/$USER/Pictures ]; then
-              ln -sf /home/$USER/Pictures $prefix/drive_c/users/$USER/Pictures
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Pictures
-          fi
+      if [ -d /home/$USER/图片 ]; then
+          ln -sf /home/$USER/图片 $prefix/drive_c/users/$USER/Pictures
+      elif [ -d /home/$USER/Pictures ]; then
+          ln -sf /home/$USER/Pictures $prefix/drive_c/users/$USER/Pictures
+      else
+          mkdir -p $prefix/drive_c/users/$USER/Pictures
+      fi
 
-          if [ -d /home/$USER/视频 ]; then
-              ln -sf /home/$USER/视频 $prefix/drive_c/users/$USER/Videos
-          elif [ -d /home/$USER/Videos ]; then
-              ln -sf /home/$USER/Videos $prefix/drive_c/users/$USER/Videos
-          else
-              mkdir -p $prefix/drive_c/users/$USER/Videos
-          fi
+      if [ -d /home/$USER/视频 ]; then
+          ln -sf /home/$USER/视频 $prefix/drive_c/users/$USER/Videos
+      elif [ -d /home/$USER/Videos ]; then
+          ln -sf /home/$USER/Videos $prefix/drive_c/users/$USER/Videos
+      else
+          mkdir -p $prefix/drive_c/users/$USER/Videos
       fi
   fi
 

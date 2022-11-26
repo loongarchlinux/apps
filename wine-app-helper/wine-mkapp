@@ -49,25 +49,32 @@ clean()
   done
   sed -i "s#\"USERNAME\"=\"$win_user\"#\"USERNAME\"=\"$FAKE_USER\"#" $prefix/user.reg
 
-  # remove the linked directories
-  for i in "Desktop" "Documents" "Downloads" "Music" "Pictures" "Videos" \
-    "Temp" "Searches" "Saved Games" "Links" "Contacts" "Favorites" "AppData"; do
-    if [ -d "$prefix/drive_c/users/$win_user/$i" ]; then
-      rm -rf "$prefix/drive_c/users/$win_user/$i"
-    elif [ -L "$prefix/drive_c/users/$win_user/$i" ]; then
-      rm -f "$prefix/drive_c/users/$win_user/$i"
-    fi
-  done
+  # clean users
+  rm -rf $prefix/drive_c/users/*
+#  for i in "Desktop" "Documents" "Downloads" "Music" "Pictures" "Videos" \
+#    "Temp" "Searches" "Saved Games" "Links" "Contacts" "Favorites" "AppData"; do
+#    if [ -d "$prefix/drive_c/users/$win_user/$i" ]; then
+#      rm -rf "$prefix/drive_c/users/$win_user/$i"
+#    elif [ -L "$prefix/drive_c/users/$win_user/$i" ]; then
+#      rm -f "$prefix/drive_c/users/$win_user/$i"
+#    fi
+#  done
 
-  for i in .update-timestamp winetricks.log; do
+
+  for i in .update-timestamp winetricks.log app_version; do
     if [ -f $prefix/${i} ]; then
-      rm $prefix/${i}
+      rm -f $prefix/${i}
     fi
   done
 
   # remove dosdevices directory
-  rm -rf $prefix/dosdevices
-  mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
+  if [ -d $prefix/dosdevices ]; then
+    rm -rf $prefix/dosdevices
+  fi
+
+  if [ -d $prefix/drive_c/users/$win_user ]; then
+    mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
+  fi
 }
 
 if [ $# -ne 1 ];then
@@ -87,7 +94,7 @@ cp -a $prefix_dir $start_dir
 
 clean $start_dir/$name
 
-( cd $start_dir/$name; tar -Jcf $start_dir/$name.tar.xz *)
+( cd $start_dir/$name; tar --zstd -cf $start_dir/$name.tar.zst *)
 
 cat > $start_dir/$name.metainfo << EOF
 # App 名称
@@ -97,7 +104,7 @@ APP_NAME_CN="$name"
 # App 版本号
 APP_VERSION="1.0"
 # App 压缩包文件名
-APP_ARCHIVE="$name.tar.xz"
+APP_ARCHIVE="$name.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径
@@ -132,10 +139,10 @@ arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
 groups=('wine-apps')
-depends=('wine')
+depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("\$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/\$pkgname.tar.xz//\$pkgname.tar.xz"
+noextract=("\$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/\$pkgname.tar.zst//\$pkgname.tar.zst"
     16.png
     24.png
     32.png
@@ -157,12 +164,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                \${pkgdir}/opt/wine-apps/\$pkgname/.appignore
-  install -Dm644 \$srcdir/\$pkgname.tar.xz   \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname.tar.xz
+  install -Dm644 \$srcdir/\$pkgname.tar.zst  \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname.tar.zst
   install -Dm644 \$srcdir/\$pkgname.metainfo \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname.metainfo
   install -Dm644 \$srcdir/\$pkgname.desktop  \${pkgdir}/usr/share/applications/\$pkgname.desktop
   ln -sf wine-run                          \${pkgdir}/usr/bin/\$pkgname
 
-  for i in 16 24 32 48 64 128 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f \$srcdir/\$i.png ]; then
       install -Dm644 \$srcdir/\$i.png        \${pkgdir}/usr/share/icons/hicolor/\${i}x\${i}/apps/\$pkgname.png
     fi
