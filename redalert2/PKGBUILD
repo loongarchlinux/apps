@@ -1,6 +1,6 @@
 pkgname=redalert2
 pkgver=1.6
-pkgrel=1
+pkgrel=2
 pkgdesc="Red Alert 2(红警2)"
 arch=('any')
 url="http://ra2.com"
@@ -8,17 +8,17 @@ license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/eaa675abee8fd8f53cac5bce29d7029e/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/ea8ef569102d6756d2bf70333e8cce55/$pkgname.tar.zst"
     16.png
     32.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('5baccc03d916e7bd650ca0dcc3cfa95cd9fb6bcc2631e9828e8adeb0ebfa6f52'
+sha256sums=('32a6e24949936ce209410c21b810789a466b36bd60d64c122b7c02a05a2e24cc'
             '6e6dcbdff25f28b2f1c0a5f187eb8dd0e180632470d7162b9587cde9d62a94ca'
             '98577e9bc701148773930df74b289cf393786deaa7fe730482a6bf873dba06ec'
-            '992660e2b438473ff400fcca830ffb321def89a7fcf312c470e58d6cebb693fb'
-            'ca6b109729e7e1b7f2d7327ca52ecb2399d2edb6b4f0533b0d6ca364491bf8ad')
+            '7d151f288065121c3b945998621d634859de2121d7a939e0c040da40a178274a'
+            'e75c2971603d3469e94cb71591176c713ea6e027921655d87b269042f5d721fb')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
@@ -29,12 +29,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi

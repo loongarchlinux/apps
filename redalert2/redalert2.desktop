@@ -4,5 +4,7 @@ Name[zh_CN]=红色警戒2 中国崛起
 Exec=redalert2
 Type=Application
 StartupNotify=true
+Terminal=false
 Icon=redalert2
 Categories=Player;Game;
+StartupWMClass=redalert2.exe
