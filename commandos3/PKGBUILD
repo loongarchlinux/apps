@@ -1,6 +1,6 @@
 pkgname=commandos3
-pkgver=3.0
-pkgrel=1
+pkgver=1.42
+pkgrel=2
 pkgdesc="Commandos3 Destination Berlin"
 arch=('any')
 url="http://www.unkonwn.com"
@@ -8,18 +8,18 @@ license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/8d3cec8dbfc4916ff631e680b507fbe5/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/208db146fca295c519dd541e536ba60c/$pkgname.tar.zst"
     16.png
     32.png
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('3d783f19780816ef545322377513778ef1d35bea0c19f83ac012b5460d47cef9'
+sha256sums=('4ba4c6f20b62cda412c8b7222ff10333199ebb3ee27b1ac2a4fefcf5311bff85'
             '41866eb2222f584da262f46d0cc9fc69914cdc02d3da31a4d85e258e22683f86'
             '9046f02aecb23d9f1adc25c4c1d7137d8a2e7c22245197f2049c0dcf9c01b3ba'
             '05aa8c160a47e62b68afefcba57a73efcab9c7cd5f53c0abb309d3b3ebfee415'
-            'c823f7f3521a65ea337b532e70fc5458f6fef243db3f02317f909117ccfa0578'
+            '7e90f5ef8fd49f493dd864fc71c3e4f559fadcffc530a8761c83eb95da35b94f'
             'ce6a439c14f843afb478d6cfc380419c2f4e15dfb8baf48068a0afde054ed936')
 
 package() {
@@ -31,12 +31,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
