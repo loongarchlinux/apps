@@ -8,18 +8,18 @@ license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/b5ea7994a35635299a6e7886c7511543/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/dab837a91b5926336b1fa02aa0bda0da/$pkgname.tar.zst"
     16.png
     32.png
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('1cf22189f237ec76833f9379e1b65e97ec6a6b76c3ca3da589d690d66e4f4bba'
+sha256sums=('c7f471c2e7ad45620178e675679f58bcba57fe6983c2c9842a68247b2129a804'
             '4f2deebb9c1c9b5ed1a4e2c51c96fe35f9852bea5d714f93eabc49713e2045d4'
             'a7465ae284a48b7d5fe7155878533c76f549051f6d67b513976dcab6e4b184f2'
             '34de1e9fc20fa763196eec4975c9e5f45b599441673ca282b799f2c42fd23461'
-            '488348439f02346d49fd0f9ba2a28efe96093907a3056c114eaea9c59f4c0e87'
+            '11815b0de8f204ae11a1502b212d0e826c7b2e5e41feb6d18dd2994c32df39c5'
             '4fdb5b0545d017a6206ebde0600ac2eb14523ff47ee5d266936a84f78ae617d8')
 
 package() {
@@ -31,12 +31,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
