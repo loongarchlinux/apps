@@ -103,6 +103,7 @@ clean $start_dir/$name
 ( cd $start_dir/$name; tar --zstd -cf $start_dir/$name.tar.zst *)
 
 cat > $start_dir/$name.metainfo << EOF
+# vim: set ft=sh:
 # App 名称
 APP_NAME="$name"
 # App 中文名称,首次启动时需要显示
