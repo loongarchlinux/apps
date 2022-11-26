@@ -1,0 +1,44 @@
+pkgname=plantsvszombies
+pkgver=1.0
+pkgrel=1
+pkgdesc="plantsvszombies"
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('wine-apps')
+depends=('wine-app-helper')
+OPTIONS=(!strip)
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/ac0a60a4ce6afd6b1eaf9ea20aff1cd5/$pkgname.tar.zst"
+    16.png
+    32.png
+    48.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('2256125772e075537420f755479083efaaee83135fc4fcd4d5b336e2657dd884'
+            'c689aff93ceb57a2715a385d1e149084ab852dcfacbfbed761bf6084e0669995'
+            'adb7fb76097b7dece8cbb1d056046f6dbc9b2b5baa667a8cd4aaf54ea6c92f6c'
+            '843f8b443c0221f823ac69e3e34d1136e6d8d4a06bbe9e98e30310bb77a4d2da'
+            '8f563eccf3b3f68ee95373933dc84c4db3e758a6c53fdb51778df80b38e873d7'
+            '3f0917b0cc015603e885d44fc510ab64dba05e9e87e2c6134ab822a92f57a11a')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}

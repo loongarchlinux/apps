@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=plantsvszombies
+Name[zh_CN]=植物大战僵尸
+Exec=plantsvszombies
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=plantsvszombies
+Categories=Game;
+StartupWMClass=plantsvszombies.exe

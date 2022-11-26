@@ -1,0 +1,17 @@
+# vim: set ft=sh:
+# App 名称
+APP_NAME="plantsvszombies"
+# App 中文名称,首次启动时需要显示
+APP_NAME_CN="植物大战僵尸"
+# App 版本号
+APP_VERSION="1.0"
+# App 压缩包文件名
+APP_ARCHIVE="plantsvszombies.tar.zst"
+# App 版本升级时需要忽略的文件列表
+APP_IGNORE=".appignore"
+# App 运行时需要进入的路径
+APP_RUN_PATH="drive_c/Program Files/Plants_Vs_Zombies"
+# App 运行命令
+APP_RUN_CMD="PlantsVsZombies.exe"
+# App 运行时使用的 wine 版本号，当需要使用与默认wine不同的版本时需要指定。
+APP_RUN_WINE=""
