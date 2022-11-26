@@ -49,7 +49,7 @@ clean()
   done
   sed -i "s#\"USERNAME\"=\"$win_user\"#\"USERNAME\"=\"$FAKE_USER\"#" $prefix/user.reg
 
-  # clean users
+  # clean c:\users
   rm -rf $prefix/drive_c/users/*
 #  for i in "Desktop" "Documents" "Downloads" "Music" "Pictures" "Videos" \
 #    "Temp" "Searches" "Saved Games" "Links" "Contacts" "Favorites" "AppData"; do
@@ -60,6 +60,12 @@ clean()
 #    fi
 #  done
 
+  # clean c:\windows
+  for i in Installer temp; do
+    if [ -d $prefix/drive_c/windows/$i ]; then
+      rm -rf $prefix/drive_c/windows/$i/*
+    fi
+  done
 
   for i in .update-timestamp winetricks.log app_version; do
     if [ -f $prefix/${i} ]; then
