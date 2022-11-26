@@ -5,12 +5,12 @@ APP_NAME_CN="aardio桌面软件快速开发"
 # App 版本号
 APP_VERSION="35.38.2"
 # App 压缩包文件名
-APP_ARCHIVE="aardio.tar.xz"
+APP_ARCHIVE="aardio.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
-# App 运行命令
-APP_RUN_CMD="aardio.exe"
 # App 运行时需要进入的路径
 APP_RUN_PATH="drive_c/aardio"
+# App 运行命令
+APP_RUN_CMD="aardio.exe"
 # App 运行时使用的 wine 版本号，当需要使用与默认wine不同的版本时需要指定。
 APP_RUN_WINE=""

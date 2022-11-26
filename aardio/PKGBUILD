@@ -1,6 +1,6 @@
 pkgname=aardio
 pkgver=35.28.2
-pkgrel=1
+pkgrel=2
 pkgdesc="aardio"
 arch=('any')
 url="https://aardio.com"
@@ -8,20 +8,20 @@ license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://loongarch.zhcn.cc/sources/wine-apps/$pkgname.tar.xz/17f3d853f614abd9451019d9716fea28/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/328474d1e07da0c66a7098032ea8f40f/$pkgname.tar.zst"
     16.png
     32.png
     48.png
     64.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('0f193afda4f22d5f50cd06936dd77734a9a03f81f9fc041d867d8f243499d33a'
+sha256sums=('f41d66e59b94f4c6a3963ed6b16f3d272cc8c25d1ff5d1b6684080b0aa33b8bc'
             '8450aef2dc1eee1ea9053e8a7af2179d8063e0f463ffbbc395b4242604b3676a'
             '8acd017e2836249052cdbfcf0702a20404ec0e9d9b5fcb91bdf24b5a4da427c6'
             '34a424b0e521aeb034dc5551de0a2d0ce2f6b9996511bd3aff11711b137cfc55'
             '2073247e93c4d14868b17f21dcda81223fa613b4d363c77b9277cc4c3a58e2b5'
-            '86b034a89df611e49fe3996e3b579ad05345ff82d87955951ab8a97da5ef11b2'
+            '6368823e9fdd024f7b0983bdf87a07a1fa93e4f216f90c731871efbcd7779bff'
             'd41734f82cd483c6a022d4b4a0c8b0255b4781cf622e09dcf216eb45d232261e')
 
 package() {
@@ -33,12 +33,12 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
 
-  for i in 16 24 32 48 64 128 256; do
+  for i in 16 24 32 48 64 96 128 256; do
     if [ -f $srcdir/$i.png ]; then
       install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
