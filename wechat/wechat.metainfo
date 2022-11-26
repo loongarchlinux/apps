@@ -5,7 +5,7 @@ APP_NAME_CN="微信"
 # App 版本号
 APP_VERSION="1.0"
 # App 压缩包文件名
-APP_ARCHIVE="wechat.tar.xz"
+APP_ARCHIVE="wechat.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径

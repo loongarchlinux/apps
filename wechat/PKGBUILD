@@ -1,15 +1,15 @@
 pkgname=wechat
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="wechat"
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
-groups=('lat')
-#depends=('wine7.20')
+groups=('wine-apps')
+depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.xz")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/2ff794b4fff60b23561699a20b172b75/$pkgname.tar.xz"
+noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/957159f6953765481d00dfbcc8d6ae76/$pkgname.tar.zst"
     16.png
     24.png
     32.png
@@ -20,7 +20,7 @@ source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.xz/2ff794b4f
     256.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('b23319888976e591c9f30bde0eb825dc1dcf3b9e8f8a8f81f15bf9e6dd6ee84d'
+sha256sums=('13b7c7da09d182fb62277e992304934a8fe8de1c04441342d1306fdbb749b5de'
             '009a08143d266a6c8616080984162198653246787011a07551537555d47e7b5f'
             '85a3e7cf892cf6db0052b8eeccb24402396176109a28e0644b0840c2b7f4f17d'
             '93eee88197baa3bf59a93a96d55ad8597f8fd068969f0135b376247d7a9cdbb4'
@@ -29,7 +29,7 @@ sha256sums=('b23319888976e591c9f30bde0eb825dc1dcf3b9e8f8a8f81f15bf9e6dd6ee84d'
             '484e68d64729a4fbd8737080db3fd11794a2f3a2b38955868b256cfc9456a5ec'
             '1d8599cee1f6cf5f2223a4000dbeea972da8196ea215045eef39582af42f8471'
             '75f7c75c0a6329089296071cad40ff6e380ba115775f22ad79d71e53da37fb30'
-            '2b30d4e7f7b05c4ef89bf6d2037dbc4d9c6d54ca1452213439752b000d21a8e0'
+            '8de8fb39eb0835716f1c78ef568597b22586dc3751bc7e7db25ce9dc5dc0244d'
             '54853528471907e3bc1540f4c1905ef05c8c81b4ac2f7dcab08124c552616aa2')
 
 package() {
@@ -41,7 +41,7 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.xz   ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.xz
+  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
