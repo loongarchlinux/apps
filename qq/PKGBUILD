@@ -1,27 +1,30 @@
 pkgname=qq
 pkgver=9.6.8.28823
-pkgrel=1
-pkgdesc="QQ"
+pkgrel=2
+pkgdate=20221127
+pkgdesc="Tencent QQ"
 arch=('any')
 url="http://pc.qq.com"
 license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("$pkgname.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/48ae0caea6499bc851da14c99d198392/$pkgname.tar.zst"
+noextract=("$pkgname-$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/e9c7df4bdc5e210f4d187991dae21dfd/$pkgname-$pkgdate.tar.zst"
+    http://loongarch.zhcn.cc/list/wine-apps/qq-20221127.tar.zst/e9c7df4bdc5e210f4d187991dae21dfd/qq-20221127.tar.zst
     16.png
     24.png
     32.png
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('ef066bf39b3da2417e1ba9c3021b62a1cf3ea2a9fa3a995d4489c5b3c73986ff'
+sha256sums=('5d63cb9bec3ba06a95c1323a53c7c67c164b5a1234f060c46148a2909fadfb74'
+            '5d63cb9bec3ba06a95c1323a53c7c67c164b5a1234f060c46148a2909fadfb74'
             'be226e10f26e5a72a94a1d20133c52f0e80fda6ea0d682b5ee5e952019451400'
             '27466c823ba95d2cfcb00d29a4527fa2536dc8d2a6b47e96f6cd5bd6e5fed95d'
             '179d67717cceb71f4f5cd887dbaf470e5a7a711e3f15dd1f95c811eb0a555de2'
             '70bcc0b060c11dcf4685482f14f209c3ba0fe352a969675e66103fde1ac444ce'
-            '0abdd0ed978fb4905af34494e3563196840a8239668ee65838636e0646446410'
+            '310dfb887ecec05d112c30627c8c79d6dcdf97c7e34b5ddf461ea35ea4bf54ca'
             'bd54b57b6b81f29ea3b7005d2cc8a9c1d0ca0bd2aba19412dfc0323baff6196e')
 
 package() {
@@ -33,7 +36,7 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname

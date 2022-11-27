@@ -6,7 +6,7 @@ APP_NAME_CN="QQ"
 # App 版本号
 APP_VERSION="9.6.8.28823"
 # App 压缩包文件名
-APP_ARCHIVE="qq.tar.zst"
+APP_ARCHIVE="qq-20221127.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径
