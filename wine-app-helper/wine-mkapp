@@ -78,6 +78,10 @@ clean()
     rm -rf $prefix/dosdevices
   fi
 
+  if [ -d "$prefix/drive_c/ProgramData" ]; then
+    rm -rf $prefix/drive_c/ProgramData/*
+  fi
+
   if [ -d $prefix/drive_c/users/$win_user ]; then
     mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
   fi
@@ -91,6 +95,8 @@ prefix_dir=`realpath $1`
 name=`basename $prefix_dir`
 start_dir=`mktemp -d /tmp/winapp.XXXX`
 app_dir="/tmp/winapp.${name}"
+pkg_date=`date +%Y%m%d`
+tarballs=$name-$pkg_date.tar.zst
 
 if [ ! -d $prefix_dir/drive_c ]; then
   exit
@@ -100,7 +106,7 @@ cp -a $prefix_dir $start_dir
 
 clean $start_dir/$name
 
-( cd $start_dir/$name; tar --zstd -cf $start_dir/$name.tar.zst *)
+( cd $start_dir/$name; tar --zstd -cf $start_dir/$tarballs *)
 
 cat > $start_dir/$name.metainfo << EOF
 # vim: set ft=sh:
@@ -111,7 +117,7 @@ APP_NAME_CN="$name"
 # App 版本号
 APP_VERSION="1.0"
 # App 压缩包文件名
-APP_ARCHIVE="$name.tar.zst"
+APP_ARCHIVE="$tarballs"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径
@@ -142,14 +148,15 @@ pkgname=$name
 pkgver=1.0
 pkgrel=1
 pkgdesc="$name"
+pkgdate=$pkg_date
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
 groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
-noextract=("\$pkgname.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/\$pkgname.tar.zst//\$pkgname.tar.zst"
+noextract=("\$pkgname-\$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/\$pkgname-\$pkgdate.tar.zst//\$pkgname-\$pkgdate.tar.zst"
     16.png
     24.png
     32.png
@@ -171,7 +178,7 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                \${pkgdir}/opt/wine-apps/\$pkgname/.appignore
-  install -Dm644 \$srcdir/\$pkgname.tar.zst  \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname.tar.zst
+  install -Dm644 \$srcdir/\$pkgname-\$pkgdate.tar.zst  \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname-\$pkgdate.tar.zst
   install -Dm644 \$srcdir/\$pkgname.metainfo \${pkgdir}/opt/wine-apps/\$pkgname/\$pkgname.metainfo
   install -Dm644 \$srcdir/\$pkgname.desktop  \${pkgdir}/usr/share/applications/\$pkgname.desktop
   ln -sf wine-run                          \${pkgdir}/usr/bin/\$pkgname

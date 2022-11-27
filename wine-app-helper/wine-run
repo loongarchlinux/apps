@@ -32,6 +32,7 @@ APP_RUN_WINE=""
 
 OPT_RESET=n
 OPT_HELP=n
+OPT_DEBUG=n
 
 APP_DIR=$APP_TOP_DIR/$APP_NAME
 WINEPREDLL="$APP_DIR/lib"
@@ -62,13 +63,15 @@ $0 [OPTIONS...]
 运行当前容器的默认应用程序-`basename $APP_RUN_CMD`
 
 Option:
-  -c --console  打开当前容器的终端
-  -f --winefile 打开当前容器的文件管理器
-  -s --winecfg  打开当前容器的设置工具
-  -r --regedit  打开当前容器的注册表
-  -t --taskmgr  打开当前容器的任务管理器
-  -e --reset    重置当前容器到首次安装状态
-  -h --help     显示帮助
+  -c --console          运行当前容器的终端窗口
+  -f --winefile         运行当前容器的资源管理器
+  -s --winecfg          运行当前容器的设置工具
+  -r --regedit          运行当前容器的注册表
+  -t --taskmgr          运行当前容器的任务管理器
+  -u --uninstaller      运行当前容器的添加/删除程序
+  -d --debug <DEBUG>    以Debug方式运行当前容器的默认应用
+  -e --reset            重置当前容器到首次启动前状态
+  -h --help             显示帮助
 ENDLINE
 }
 
@@ -114,6 +117,7 @@ app_fix()
       ln -sf $XDG_MUSIC_DIR $prefix/drive_c/users/$USER/Music
       ln -sf $XDG_PICTURES_DIR $prefix/drive_c/users/$USER/Pictures
       ln -sf $XDG_VIDEOS_DIR $prefix/drive_c/users/$USER/Videos
+      ln -sf $XDG_TEMPLATES_DIR $prefix/drive_c/users/$USER/Templates
   else
       if [ -d /home/$USER/桌面 ]; then
           ln -sf /home/$USER/桌面 $prefix/drive_c/users/$USER/Desktop
@@ -161,6 +165,14 @@ app_fix()
           ln -sf /home/$USER/Videos $prefix/drive_c/users/$USER/Videos
       else
           mkdir -p $prefix/drive_c/users/$USER/Videos
+      fi
+
+      if [ -d /home/$USER/模板 ]; then
+          ln -sf /home/$USER/模板 $prefix/drive_c/users/$USER/Templates
+      elif [ -d /home/$USER/Templates ]; then
+          ln -sf /home/$USER/Templates $prefix/drive_c/users/$USER/Templates
+      elif [ -d /home/$USER/.Templates ]; then
+          ln -sf /home/$USER/.Templates $prefix/drive_c/users/$USER/Templates
       fi
   fi
 
@@ -225,6 +237,11 @@ app_run()
     else
         app_update | progressbar $name "正在更新$name中..."
     fi
+
+    if [ $OPT_DEBUG != "n" ]; then
+        export WINEDEBUG="$OPT_DEBUG"
+    fi
+
     if [ -n "$APP_RUN_PATH" ];then
         cd "$WINEPREFIX/$APP_RUN_PATH"
         exec $WINE_CMD $APP_RUN_CMD
@@ -248,8 +265,8 @@ if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
     exit 1
 fi
 
-LONGOPTS=console,reset,winefile,winecfg,help,regedit,taskmgr
-OPTIONS=cefshrt
+LONGOPTS=console,debug:,reset,winefile,winecfg,help,regedit,taskmgr,uninstaller
+OPTIONS=cd:efshrtu
 
 ! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
@@ -263,6 +280,10 @@ while true; do
             APP_RUN_PATH="drive_c/windows"
             APP_RUN_CMD=wineconsole
             shift
+            ;;
+        -d|--debug)
+            OPT_DEBUG="$2"
+            shift 2
             ;;
         -e|--reset)
             OPT_RESET=y
@@ -288,6 +309,11 @@ while true; do
             APP_RUN_CMD=taskmgr
             shift
             ;;
+        -u|--uninstaller)
+            APP_RUN_PATH="drive_c/windows"
+            APP_RUN_CMD=uninstaller
+            shift
+            ;;
         -h|--help)
             OPT_HELP=y
             shift
@@ -308,11 +334,6 @@ if [ $OPT_HELP == "y" ];then
     exit 0
 fi
 
-if ! command -v zenity >/dev/null 2>&1;then
-    echo "please install package zenity"
-    exit 1
-fi
-
 if [ $APP_NAME == "wine-run" ]; then
     echo "nothing to do"
     exit 1
@@ -322,4 +343,10 @@ if [ "x${OPT_RESET}" == "xy" ]; then
     rm -rf $WINEPREFIX
     exit
 fi
+
+if ! command -v zenity >/dev/null 2>&1;then
+    echo "please install package zenity"
+    exit 1
+fi
+
 app_run
