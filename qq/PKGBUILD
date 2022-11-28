@@ -1,6 +1,6 @@
 pkgname=qq
 pkgver=9.6.8.28823
-pkgrel=2
+pkgrel=3
 pkgdate=20221127
 pkgdesc="Tencent QQ"
 arch=('any')
