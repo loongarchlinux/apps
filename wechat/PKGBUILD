@@ -1,6 +1,6 @@
 pkgname=wechat
 pkgver=1.0
-pkgrel=3
+pkgrel=4
 pkgdesc="wechat"
 arch=('any')
 url="http://www.unkonwn.com"
@@ -30,7 +30,7 @@ sha256sums=('13b7c7da09d182fb62277e992304934a8fe8de1c04441342d1306fdbb749b5de'
             '1d8599cee1f6cf5f2223a4000dbeea972da8196ea215045eef39582af42f8471'
             '75f7c75c0a6329089296071cad40ff6e380ba115775f22ad79d71e53da37fb30'
             '8de8fb39eb0835716f1c78ef568597b22586dc3751bc7e7db25ce9dc5dc0244d'
-            '54853528471907e3bc1540f4c1905ef05c8c81b4ac2f7dcab08124c552616aa2')
+            '1dcf111603247bb4c5405b36e4cd30aef4a049c58e739a18ec71065ca814bb9b')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}

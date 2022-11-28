@@ -8,5 +8,5 @@ Type=Application
 StartupNotify=true
 Terminal=false
 Icon=wechat
-Categories=Game;
+Categories=Network;
 StartupWMClass=wechat.exe
