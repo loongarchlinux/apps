@@ -349,4 +349,16 @@ if ! command -v zenity >/dev/null 2>&1;then
     exit 1
 fi
 
+mmap_min=`sysctl -n vm.mmap_min_addr`
+
+if [ $mmap_min -lt 65536 ]; then
+    zenity --error --text="错误！" --text="请用管理员用户运行以下命令后再重新运行\n\nsysctl vm.mmap_min_addr=65536"
+    exit 1
+fi
+
+if ! grep "\[never\]" /sys/kernel/mm/transparent_hugepage/enabled; then
+    zenity --error --text="警告！" --text="请用管理员用户运行以下命令后再重新运行\n\necho never > /sys/kernel/mm/transparent_hugepage/enabled"
+    exit 1
+fi
+
 app_run

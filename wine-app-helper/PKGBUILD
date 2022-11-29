@@ -1,6 +1,6 @@
 pkgname=wine-app-helper
 pkgver=0.2
-pkgrel=3
+pkgrel=4
 pkgdesc="Helper tools to run wine bottle apps"
 arch=('any')
 url="https://www.zhcn.cc"
@@ -8,7 +8,7 @@ license=('GPL')
 depends=('wine' 'zenity')
 source=(wine-run
     wine-mkapp)
-sha256sums=('45431d6f9037c49bafbff16319a8af9ee285351fc997d3dbf7b3e1e6d91cd787'
+sha256sums=('556dc663f5b621c2fe80b39d7f90cac6e56f9b34d6bb1733a03760167dc29c8b'
             '539bc5546f151ad3b6b3f79d991bd0781b653c99a9c05d884211aeb8afb0fdba')
 
 package() {
