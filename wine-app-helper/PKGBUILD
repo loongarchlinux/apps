@@ -8,7 +8,7 @@ license=('GPL')
 depends=('wine' 'zenity')
 source=(wine-run
     wine-mkapp)
-sha256sums=('556dc663f5b621c2fe80b39d7f90cac6e56f9b34d6bb1733a03760167dc29c8b'
+sha256sums=('710829dad57462e0f011219056f7cf63d04b431fc6de8d1e1e7994d0fa8ee112'
             '539bc5546f151ad3b6b3f79d991bd0781b653c99a9c05d884211aeb8afb0fdba')
 
 package() {
