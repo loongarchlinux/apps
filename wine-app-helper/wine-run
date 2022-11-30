@@ -40,17 +40,20 @@ WINEPREDLL="$APP_DIR/lib"
 if [ -f $APP_DIR/$APP_NAME.metainfo ]; then
     source $APP_DIR/$APP_NAME.metainfo
 else
-    zenity --error --text="出错啦！" --text="找不到 $APP_DIR/$APP_NAME.metainfo 文件，请检查安装包是否正确"
+    zenity --error --title="出错啦！" --text="找不到 $APP_DIR/$APP_NAME.metainfo 文件，请检查安装包是否正确"
     exit
 fi
 
 
-if [ "x$APP_RUN_WINE" != "x" ] && [ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]; then
+if [ "x$APP_RUN_WINE" == "x" ]; then
+    WINE_CMD="wine"
+elif [ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]; then
     WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
     WINE_CMD=$WINE_DIR/bin/wine
     export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
 else
     WINE_CMD="wine"
+    zenity --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" --timeout=6
 fi
 
 export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
