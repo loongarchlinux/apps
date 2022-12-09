@@ -7,7 +7,7 @@ url="https://www.zhcn.cc"
 license=('GPL')
 depends=('wine' 'zenity')
 source=(wine-run wine-mkapp)
-sha256sums=('62b96642f83c4ca378ee0ffd63802d7d9850f5d6cac4e961b1412d1580d30a2c'
+sha256sums=('3559db657f574d169f7812b7722cea5a83180089b7054d4d4eaf7d89bdfb45f3'
             '539bc5546f151ad3b6b3f79d991bd0781b653c99a9c05d884211aeb8afb0fdba')
 
 package() {

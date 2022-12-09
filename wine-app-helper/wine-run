@@ -36,6 +36,7 @@ OPT_DEBUG=n
 
 APP_DIR=$APP_TOP_DIR/$APP_NAME
 WINEPREDLL="$APP_DIR/lib"
+WINE_CMD="wine"
 
 if [ -f $APP_DIR/$APP_NAME.metainfo ]; then
     source $APP_DIR/$APP_NAME.metainfo
@@ -43,20 +44,6 @@ else
     zenity --error --title="出错啦！" --text="找不到 $APP_DIR/$APP_NAME.metainfo 文件，请检查安装包是否正确"
     exit
 fi
-
-
-if [ "x$APP_RUN_WINE" == "x" ]; then
-    WINE_CMD="wine"
-elif [ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]; then
-    WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
-    WINE_CMD=$WINE_DIR/bin/wine
-    export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
-else
-    WINE_CMD="wine"
-    zenity --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" --timeout=6
-fi
-
-export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
 
 usage()
 {
@@ -72,6 +59,8 @@ Option:
   -r --regedit          运行当前容器的注册表
   -t --taskmgr          运行当前容器的任务管理器
   -u --uninstaller      运行当前容器的添加/删除程序
+  -n --notepad          运行当前容器的记事本
+  -b --browser          浏览当前容器的文件
   -d --debug <DEBUG>    以Debug方式运行当前容器的默认应用
   -e --reset            重置当前容器到首次启动前状态
   -h --help             显示帮助
@@ -268,8 +257,8 @@ if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
     exit 1
 fi
 
-LONGOPTS=console,debug:,reset,winefile,winecfg,help,regedit,taskmgr,uninstaller
-OPTIONS=cd:efshrtu
+LONGOPTS=console,debug:,reset,winefile,winecfg,help,regedit,taskmgr,uninstaller,notepad,browser
+OPTIONS=cd:efshrtunb
 
 ! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
@@ -317,6 +306,17 @@ while true; do
             APP_RUN_CMD=uninstaller
             shift
             ;;
+        -n|--notepad)
+            APP_RUN_PATH="drive_c/windows"
+            APP_RUN_CMD=notepad
+            shift
+            ;;
+        -b|--browser)
+            APP_RUN_PATH=""
+            APP_RUN_CMD="file://$WINEPREFIX"
+            WINE_CMD=xdg-open
+            shift
+            ;;
         -h|--help)
             OPT_HELP=y
             shift
@@ -337,6 +337,8 @@ if [ $OPT_HELP == "y" ];then
     exit 0
 fi
 
+export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
+
 if [ $APP_NAME == "wine-run" ]; then
     echo "nothing to do"
     exit 1
@@ -350,6 +352,15 @@ fi
 if ! command -v zenity >/dev/null 2>&1;then
     echo "please install package zenity"
     exit 1
+fi
+
+if [[ -n "$APP_RUN_WINE" ]] && [[ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]]; then
+    WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
+    WINE_CMD=$WINE_DIR/bin/wine
+    export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
+else
+    zenity --timeout 3 --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" || :
+    echo hello
 fi
 
 if [ `uname -m` == "loongarch64" ]; then
