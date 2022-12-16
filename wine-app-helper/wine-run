@@ -354,13 +354,28 @@ if ! command -v zenity >/dev/null 2>&1;then
     exit 1
 fi
 
-if [[ -n "$APP_RUN_WINE" ]] && [[ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]]; then
-    WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
-    WINE_CMD=$WINE_DIR/bin/wine
-    export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
-else
-    zenity --timeout 3 --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" || :
-    echo hello
+if [ -n "$APP_RUN_WINE" ]; then
+    if [ -x ${WINE_DIR_PREFIX}-${APP_RUN_WINE}/bin/wine ]; then
+        WINE_DIR=${WINE_DIR_PREFIX}-${APP_RUN_WINE}
+        WINE_CMD=$WINE_DIR/bin/wine
+        export PATH=$WINE_DIR/bin:$PATH
+        export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
+    else
+        zenity --timeout 3 --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" || :
+    fi
+fi
+
+# 如果没有安装默认 wine 版本，将使用已存在的最高版本
+if [ ! -x /usr/bin/wine ]; then
+    WINE_CMD=`ls /opt/wine-*/bin/wine |tail -n 1`
+    if [ "x$WINE_CMD" != "x" ];then
+        WINE_DIR=$(dirname `dirname $WINE_CMD`)
+        export PATH=$WINE_DIR/bin:$PATH
+        export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
+    else
+        zenity --error --text="错误！" --text="无法继续运行，请先安装wine软件包。"
+        exit 1
+    fi
 fi
 
 if [ `uname -m` == "loongarch64" ]; then
@@ -370,10 +385,10 @@ if [ `uname -m` == "loongarch64" ]; then
         exit 1
     fi
 
-    if ! grep "\[never\]" /sys/kernel/mm/transparent_hugepage/enabled >/dev/null; then
-        zenity --error --text="警告！" --text="请用管理员用户运行以下命令后再重新运行\n\necho never > /sys/kernel/mm/transparent_hugepage/enabled"
-        exit 1
-    fi
+#    if ! grep "\[never\]" /sys/kernel/mm/transparent_hugepage/enabled >/dev/null; then
+#        zenity --error --text="警告！" --text="请用管理员用户运行以下命令后再重新运行\n\necho never > /sys/kernel/mm/transparent_hugepage/enabled"
+#        exit 1
+#    fi
 fi
 
 app_run
