@@ -34,5 +34,3 @@ EOF
     fi
   done
 }
-sha256sums=('ed979b3413fbaf7575b0c61f5cfec59032bc66eade5baca8944d6915932b222f'
-            '3a1b5d9b55af5c646ec406246aecd01899ad03ed77da85c1e59f12d55d589e0b')
