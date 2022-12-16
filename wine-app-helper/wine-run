@@ -45,6 +45,8 @@ else
     exit
 fi
 
+export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
+
 usage()
 {
     cat << ENDLINE
@@ -336,8 +338,6 @@ if [ $OPT_HELP == "y" ];then
     usage
     exit 0
 fi
-
-export WINEPREFIX=$HOME/.local/share/wineprefixes/$APP_NAME
 
 if [ $APP_NAME == "wine-run" ]; then
     echo "nothing to do"
