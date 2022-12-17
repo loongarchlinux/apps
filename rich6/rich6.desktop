@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Rich 6
+Name[zh_CN]=大富翁6
+Exec=rich6
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=rich6
+Categories=Game;
+StartupWMClass=rich6.exe

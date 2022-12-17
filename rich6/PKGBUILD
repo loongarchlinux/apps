@@ -1,0 +1,45 @@
+pkgname=rich6
+pkgver=1.0
+pkgrel=1
+pkgdesc="Rich(大富翁) 6"
+pkgdate=20221217
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('wine-apps')
+depends=('wine-app-helper')
+OPTIONS=(!strip)
+noextract=("$pkgname-$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/85afbdcb941f6692c0bf97341269e477/$pkgname-$pkgdate.tar.zst"
+    16.png
+    24.png
+    32.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('710be7f6a7fd8249e1f41970da9cffbd44ef786a525e2198f173e6670a4fa489'
+            'c56660d5fbb6ab9584ec6c4ee899171137ee464edf5baefa7370b208bef703d9'
+            '09e418ae3d24b53b192d583f293b9dc51f65aeedf6c8d0d4cf0c99738abfaa36'
+            '43441ca6d48930e8039ccd7035674ee630f3ddde5f5aac03e3c5422337357082'
+            '64f606e50c2768b4c32b3b4011136ca6cb1791f1478bf04541dc40c53447d3e9'
+            '5391aec45438d0ea810b15d2870fe2b9b6adb6f39f4041972c2f1e9ce020c46e')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}
