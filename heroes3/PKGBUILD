@@ -1,0 +1,49 @@
+pkgname=heroes3
+pkgver=3.0
+pkgrel=1
+pkgdesc="英雄无敌III死亡阴影"
+pkgdate=20230105
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('wine-apps')
+depends=('wine-app-helper')
+OPTIONS=(!strip)
+noextract=("$pkgname-$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eefe9c8a5233189fb9c6eb06efd45715/$pkgname-$pkgdate.tar.zst"
+        16.png
+        24.png
+        32.png
+        48.png
+        64.png
+        $pkgname.metainfo
+        $pkgname.desktop)
+sha256sums=('5177e97b9224d1022fe8f569e47caff2ce954aab20fb2a83a64a8795c2c55695'
+            '28fbd505acfb629739aa0357f32b4d921574f872f487dbc71de4e8067a4e1c17'
+            '09e418ae3d24b53b192d583f293b9dc51f65aeedf6c8d0d4cf0c99738abfaa36'
+            'ab715dfbc18b14b15892b91c67472bb8d8c9f9da542ce5b77919fe706d5ee643'
+            'af83e50ca9cd071a9eceef032397ae6a3fa9e24da2b2e9ba4738790166e8f05a'
+            'e7a9e6497a373c8204899aae793b33b4f588c50d314bc0ed3c14611ff750aa75'
+            '26717e793e14b9b721d2d19b19cc967c02e6fee32c97ed76889820a21950dbe7'
+            'f9b84968261e8fa836a03316509856136072f1f45725a43f79036ab66a16dcd4')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}

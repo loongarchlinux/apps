@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Heroes 3.0
+Name[zh_CN]=英雄无敌III死亡阴影
+Exec=heroes3
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=heroes3
+Categories=Game;
+StartupWMClass=heroes3.exe
