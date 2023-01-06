@@ -1,6 +1,6 @@
 pkgname=heroes3
 pkgver=3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="英雄无敌III死亡阴影"
 pkgdate=20230105
 arch=('any')
@@ -20,7 +20,7 @@ source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst
         $pkgname.desktop)
 sha256sums=('5177e97b9224d1022fe8f569e47caff2ce954aab20fb2a83a64a8795c2c55695'
             '28fbd505acfb629739aa0357f32b4d921574f872f487dbc71de4e8067a4e1c17'
-            '09e418ae3d24b53b192d583f293b9dc51f65aeedf6c8d0d4cf0c99738abfaa36'
+            'f920131e63b03c247901028ff926c14b300115fa22464bfc1327b8a7a00ae86b'
             'ab715dfbc18b14b15892b91c67472bb8d8c9f9da542ce5b77919fe706d5ee643'
             'af83e50ca9cd071a9eceef032397ae6a3fa9e24da2b2e9ba4738790166e8f05a'
             'e7a9e6497a373c8204899aae793b33b4f588c50d314bc0ed3c14611ff750aa75'
