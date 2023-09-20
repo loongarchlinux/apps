@@ -1,0 +1,47 @@
+pkgname=xqwizard
+pkgver=5.55
+pkgrel=1
+pkgdesc="象棋巫师(XQWizard)"
+pkgdate=20230920
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('wine-apps')
+depends=('wine-app-helper')
+OPTIONS=(!strip)
+noextract=("$pkgname-$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/ed2ff3600f8f2ea35f4bebc19463f741/$pkgname-$pkgdate.tar.zst"
+    16.png
+    24.png
+    32.png
+    48.png
+    $pkgname.metainfo
+    $pkgname.desktop)
+sha256sums=('dd8c1b1d44f474c0967f42f6109a76d227c021acf3680beea622f6862bab7aff'
+            '6f00c4b1415d15a515ef861e5d5399a19215d41b67800cb40c4e8f149896a8b5'
+            'baa1c7c28d33e1a7179c496fb753b3549810bb41c803c9dd6f1556b8283c6351'
+            'b5e0839227db22e712f5701d654561ab90266e9fef4d679b883450b8a92dc5a5'
+            '7ecbbbd8d7b09a8584be4ea21f2650eb1d9ca9162ee97d84c7d985eb6d8a995b'
+            'd94696432d2965cc1a2986fa892c792981d9790d22c0c423b51a11ac77fabbfe'
+            '76cf104c7524c9e166c9dbe38609e3f16163bb5e1bb6426a5c95057bd6b5a2af')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}
