@@ -1,0 +1,49 @@
+pkgname=wow
+pkgver=1.0
+pkgrel=1
+pkgdesc="魔兽世界"
+pkgdate=20231020
+arch=('any')
+url="http://www.unkonwn.com"
+license=('custom')
+groups=('wine-apps')
+depends=('wine-app-helper')
+OPTIONS=(!strip)
+noextract=("$pkgname-$pkgdate.tar.zst")
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eefe9c8a5233189fb9c6eb06efd45715/$pkgname-$pkgdate.tar.zst"
+        16.png
+        24.png
+        32.png
+        48.png
+        64.png
+        $pkgname.metainfo
+        $pkgname.desktop)
+sha256sums=('eccee3b7589a5ee12771b6510a15685a99b9352c851bb6beb56caad5b2c10e65'
+            '7f2d400df2899c44cf874583f481ad7fd5669b980d03f7724b1f529f56a7ec67'
+            '241b3e679c5e469e95c9d7189fa294fdc6dd096d12388bb0ea3539007ef0882b'
+            '5f6d148078ad577c6279ca6ce73a6008a6ceab22b861436bdc348f08309625d6'
+            '24f24f17ffec392289c52bdbd86822645ce3a42a6109d89f9e8670c9b5e7ef7b'
+            '1aef5cf6d1bc8839ba8b6417b1b22ac3d3f03da8b8b52a80df8c6cefb9173225'
+            '8ce57b3896a5124412c4da89222fb493fc909491125bc358d38e262db77063ff'
+            'ae225f5d0968471f4b5b9efc1c84da3ee847633c7d50d8b146430280f73b91b5')
+
+package() {
+  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
+
+  cat > app_ignore << EOF
+user.reg
+userdef.reg
+system.reg
+EOF
+  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
+  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
+
+  for i in 16 24 32 48 64 96 128 256; do
+    if [ -f $srcdir/$i.png ]; then
+      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    fi
+  done
+}

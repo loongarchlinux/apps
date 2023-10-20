@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=World of Warcraft
+Name[zh_CN]=魔兽世界
+Comment=World of Warcraft
+Comment[zh_CN]=魔兽世界
+Exec=wow
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=wow
+Categories=Game;
+StartupWMClass=wow.exe
