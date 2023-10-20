@@ -10,7 +10,7 @@ groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname-$pkgdate.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eefe9c8a5233189fb9c6eb06efd45715/$pkgname-$pkgdate.tar.zst"
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/072342730ce5b4e6422251a7f5502bad/$pkgname-$pkgdate.tar.zst"
         16.png
         24.png
         32.png
