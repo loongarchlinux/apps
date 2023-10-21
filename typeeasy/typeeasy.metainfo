@@ -6,7 +6,7 @@ APP_NAME_CN="金山打字通2016"
 # App 版本号
 APP_VERSION="2.2.0.59"
 # App 压缩包文件名
-APP_ARCHIVE="typeeasy.tar.zst"
+APP_ARCHIVE="typeeasy-20231021.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径

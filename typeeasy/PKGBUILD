@@ -1,6 +1,7 @@
 pkgname=typeeasy
 pkgver=2.2.0.59
-pkgrel=1
+pkgdate=20231021
+pkgrel=2
 pkgdesc="Kingsoft TypeEasy(金山打字通) 2016"
 arch=('any')
 url="https://www.51dzt.com"
@@ -9,20 +10,20 @@ groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/7be851722fd9c443d1ee851dfef895cc/$pkgname.tar.zst"
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/9a4cd384f44cc75dc150eb141d1e66e7/$pkgname-$pkgdate.tar.zst"
     16.png
     256.png
     32.png
     48.png
     $pkgname.metainfo
     $pkgname.desktop)
-sha256sums=('c640760537fccb6b00e6f766271676e211a0c2c5b0b839e16747649c6f0a08ba'
+sha256sums=('ce282885af333f7ba31092a17475a9c66c651b773426bede403b828bd34edbd0'
             'ab3f9192d9a3469f949b235a4012e43fabb9c0ec1378b162ed3d50359a45c94b'
             '7f93582b17651e4d83c16d1e63d8464b65f333e8e09e584b056b90db58830f97'
             'eec64b8790a8eb7b1a94fd2ff2009889689fb0380f1224ac51aeea989ebabc2e'
             '5ec8579cadfeaac927fa42b7f753a1641f70f64e0375f8923260ba302bebdbc3'
-            '3af6b0052e3f7ba3d61531a5d74ed117051919b7f72b9eb16cc52553ab6d380b'
-            'fe5427d5d1969b3b854f494aa423ed53ce630ea0185606859be1d780135e8e50')
+            '4e53adeb9b5e4957fa7275ef5f570eb48aae88d2dc1f43ceb732994ab9720d57'
+            '5322b3d212f7e6784d413716658b6467ad2fee48d291fa988b505096f264944c')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
@@ -33,7 +34,7 @@ userdef.reg
 system.reg
 EOF
   install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
+  install -Dm644 $srcdir/$pkgname-$pkgdate.tar.zst ${pkgdir}/opt/wine-apps/$pkgname/$pkgname-$pkgdate.tar.zst
   install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
   ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
@@ -44,10 +45,3 @@ EOF
     fi
   done
 }
-sha256sums=('b15e3a53bf7a0a95685632433f482545df7405e639b0b6bb6d3fb47022376638'
-            'ab3f9192d9a3469f949b235a4012e43fabb9c0ec1378b162ed3d50359a45c94b'
-            '7f93582b17651e4d83c16d1e63d8464b65f333e8e09e584b056b90db58830f97'
-            'eec64b8790a8eb7b1a94fd2ff2009889689fb0380f1224ac51aeea989ebabc2e'
-            '5ec8579cadfeaac927fa42b7f753a1641f70f64e0375f8923260ba302bebdbc3'
-            '98b851bb1268f22498ba84092230d8659a169b447dcc8f02fee89cf9fbcaa665'
-            '5322b3d212f7e6784d413716658b6467ad2fee48d291fa988b505096f264944c')
