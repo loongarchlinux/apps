@@ -8,6 +8,7 @@
 #
 # @description :
 ######################################################################
+set -e
 
 APP_TOP_DIR="/opt/wine-apps"
 WINE_DIR_PREFIX="/opt/wine"

@@ -7,7 +7,7 @@
 #
 # @description : 从.wine容器生成可安装的app目录
 ######################################################################
-set -x
+set -e
 
 FAKE_USER="@current_user@"
 
@@ -89,6 +89,10 @@ clean()
 
 if [ $# -ne 1 ];then
   usage
+elif [[ $# -ne 2 ]]; then
+  if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+    usage
+  fi
 fi
 
 prefix_dir=`realpath $1`
