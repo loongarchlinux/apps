@@ -82,9 +82,9 @@ clean()
     rm -rf $prefix/drive_c/ProgramData/*
   fi
 
-  if [ -d $prefix/drive_c/users/$win_user ]; then
-    mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
-  fi
+  #if [ -d $prefix/drive_c/users/$win_user ]; then
+  #  mv $prefix/drive_c/users/$win_user $prefix/drive_c/users/$FAKE_USER
+  #fi
 }
 
 if [ $# -ne 1 ];then
