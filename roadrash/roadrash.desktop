@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=roadrash
+Name[zh_CN]=暴力摩托2008
+Comment=roadrash
+Comment[zh_CN]=暴力摩托2008
+Exec=roadrash
+Type=Application
+StartupNotify=true
+Terminal=false
+Icon=roadrash
+Categories=Game;
+StartupWMClass=roadrash.exe
