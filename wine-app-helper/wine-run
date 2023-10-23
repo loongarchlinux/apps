@@ -66,6 +66,7 @@ Option:
   -b --browser          浏览当前容器的文件
   -d --debug <DEBUG>    以Debug方式运行当前容器的默认应用
   -e --reset            重置当前容器到首次启动前状态
+  -k --kill             杀死当前容器所有进程
   -h --help             显示帮助
 ENDLINE
 }
@@ -260,8 +261,8 @@ if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
     exit 1
 fi
 
-LONGOPTS=console,debug:,reset,winefile,winecfg,help,regedit,taskmgr,uninstaller,notepad,browser
-OPTIONS=cd:efshrtunb
+LONGOPTS=console,debug:,reset,winefile,winecfg,help,regedit,taskmgr,uninstaller,notepad,browser,kill
+OPTIONS=cd:efshrtunbk
 
 ! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
@@ -318,6 +319,11 @@ while true; do
             APP_RUN_PATH=""
             APP_RUN_CMD="file://$WINEPREFIX"
             WINE_CMD=xdg-open
+            shift
+            ;;
+        -k|--kill)
+            APP_RUN_PATH="drive_c/windows"
+            WINE_CMD="wineserver -k"
             shift
             ;;
         -h|--help)
