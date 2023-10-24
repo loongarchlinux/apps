@@ -1,6 +1,6 @@
 pkgname=win32app
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="wine 32bit application empty bottle"
 pkgdate=20231024
 arch=('any')
@@ -10,7 +10,7 @@ groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname-$pkgdate.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eeb4307476844e4fc52a1cbd8f949343/$pkgname-$pkgdate.tar.zst"
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/e707e2cb1389dfee972436ceb10001c3/$pkgname-$pkgdate.tar.zst"
     $pkgname.metainfo)
 sha256sums=('a7d19479590d187781230e8ec14fe6e6e5e1fe14e6bb3ef1a05326959a523402'
             '349815a8efd12250464f47ca5e4c68b837f2c439e6754de684dcc24824692eea')
