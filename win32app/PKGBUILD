@@ -1,8 +1,8 @@
 pkgname=win32app
 pkgver=1.0
-pkgrel=1
+pkgrel=2
 pkgdesc="wine 32bit application empty bottle"
-pkgdate=20221216
+pkgdate=20231024
 arch=('any')
 url="http://www.unkonwn.com"
 license=('custom')
@@ -10,9 +10,9 @@ groups=('wine-apps')
 depends=('wine-app-helper')
 OPTIONS=(!strip)
 noextract=("$pkgname-$pkgdate.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/c0a3b499fb43e08d61038830ec92819d/$pkgname-$pkgdate.tar.zst"
+source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eeb4307476844e4fc52a1cbd8f949343/$pkgname-$pkgdate.tar.zst"
     $pkgname.metainfo)
-sha256sums=('ed979b3413fbaf7575b0c61f5cfec59032bc66eade5baca8944d6915932b222f'
+sha256sums=('a7d19479590d187781230e8ec14fe6e6e5e1fe14e6bb3ef1a05326959a523402'
             '3a1b5d9b55af5c646ec406246aecd01899ad03ed77da85c1e59f12d55d589e0b')
 
 package() {
