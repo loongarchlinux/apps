@@ -13,7 +13,7 @@ noextract=("$pkgname-$pkgdate.tar.zst")
 source=("http://public.loongarch.dev/sources/wine-apps/$pkgname-$pkgdate.tar.zst/eeb4307476844e4fc52a1cbd8f949343/$pkgname-$pkgdate.tar.zst"
     $pkgname.metainfo)
 sha256sums=('a7d19479590d187781230e8ec14fe6e6e5e1fe14e6bb3ef1a05326959a523402'
-            '3a1b5d9b55af5c646ec406246aecd01899ad03ed77da85c1e59f12d55d589e0b')
+            '349815a8efd12250464f47ca5e4c68b837f2c439e6754de684dcc24824692eea')
 
 package() {
   mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
