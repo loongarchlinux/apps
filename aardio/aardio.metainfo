@@ -3,9 +3,9 @@ APP_NAME="aardio"
 # App 中文名称,首次启动时需要显示
 APP_NAME_CN="aardio桌面软件快速开发"
 # App 版本号
-APP_VERSION="35.38.2"
+APP_VERSION="35.70.1"
 # App 压缩包文件名
-APP_ARCHIVE="aardio.tar.zst"
+APP_ARCHIVE="aardio-20231031.tar.zst"
 # App 版本升级时需要忽略的文件列表
 APP_IGNORE=".appignore"
 # App 运行时需要进入的路径
