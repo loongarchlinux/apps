@@ -182,6 +182,20 @@ app_fix()
           fi
       done
   fi
+
+  local wine_version=`wine-change-version status|grep wine|grep default|awk '{print $1}'`
+  if [ ! -f $prefix/drive_c/windows/system32/libgcc_s_sjlj-1.dll ]; then
+      if [ -f /opt/${wine_version}/lib/wine/windows/system32/libgcc_s_sjlj-1.dll ];then
+        cp /opt/${wine_version}/lib/wine/windows/system32/libgcc_s_sjlj-1.dll \
+            $prefix/drive_c/windows/system32/libgcc_s_sjlj-1.dll
+      fi
+  fi
+  if [ ! -f $prefix/drive_c/windows/system32/libstdc++-6.dll ]; then
+      if [ -f /opt/${wine_version}/lib/wine/windows/system32/libstdc++-6.dll ];then
+          cp /opt/${wine_version}/lib/wine/windows/system32/libstdc++-6.dll \
+              $prefix/drive_c/windows/system32/
+      fi
+  fi
 }
 
 app_install()
@@ -368,7 +382,7 @@ if [ -n "$APP_RUN_WINE" ]; then
         export PATH=$WINE_DIR/bin:$PATH
         export WINEDLLPATH=$WINE_DIR/lib:$WINE_DIR/lib64
     else
-        zenity --timeout 3 --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine-${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" || :
+        zenity --timeout 3 --warning --title="警告！" --text="未安装最佳适配版本 wine-${APP_RUN_WINE}，您可以使用以下命令安装：\n\n\tsudo pacman -Sy wine${APP_RUN_WINE}\n\n\t否则，将使用默认 wine 版本 运行" || :
     fi
 fi
 
