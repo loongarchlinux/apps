@@ -7,7 +7,7 @@ arch=(loong64)
 url="https://linux.wps.cn"
 license=(custom)
 depends=(liblol)
-OPTIONS=(strip !debug)
+options=(strip !debug)
 source=("https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${pkgbld}/${pkgname}_${pkgver}.${pkgbld}_loongarch64.deb")
 sha256sums=('e48c69efcd5a7e3053753792d40f7fb5411ce36899108471f219793603708b54')
 
