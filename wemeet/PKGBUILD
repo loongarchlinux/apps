@@ -11,5 +11,7 @@ source=("https://updatecdn.meeting.qq.com/cos/e32241120138358ec28fbedeceef631c/T
 sha256sums=('a7093611beaf22e8d7fb52ccbb876e2e745882b60557b77733cd592596875d08')
 
 package() {
-      tar -C ${pkgdir} -xf data.tar.xz
+  tar -C ${pkgdir} -xf data.tar.xz
+  mkdir -p ${pkgdir}/usr/bin
+  ln -sf /opt/wemeet/wemeetapp.sh ${pkgdir}/usr/bin/wemeet
 }
