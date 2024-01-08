@@ -1,0 +1,26 @@
+pkgname=musicfree
+pkgver=0.0.1
+pkgrel=1
+pkgdesc='MusicFree 桌面版'
+license=('GPL3')
+groups=('apps')
+depends=('ffmpeg' 'electron' 'libappindicator-gtk3')
+arch=('any')
+url="https://gitee.com/maotoumao/MusicFreeDesktop"
+source=(
+    http://public.loongarch.dev/sources/${pkgname}/${pkgname}-${pkgver}.asar/88dbc4758f9bbe715ca1f0c5e6a93257/${pkgname}-${pkgver}.asar
+    logo.png
+    ${pkgname}.desktop
+    ${pkgname}
+)
+sha256sums=('2c9212e6337f65a25d7d00405de6e456ae3a2e8dd19401437fe9970c71468e25'
+            '702b8c51225a92dc93eb60f154bb1f3f54bd5b1f8b157a5ad5755b1af9d63790'
+            'dcb6244c179435a773b7878754e690f5d252550f3a61f68b4b1704cab2522bbc'
+            '3349168d9ccaa748d2efae7a8a7653799945a743411735693afa71e82615167c')
+
+package() {
+    install -Dm644 -t "${pkgdir}/usr/share/applications" "${srcdir}/${pkgname}.desktop"
+    install -Dm644 "${srcdir}/logo.png" "$pkgdir/usr/share/icons/hicolor/192x192/apps/$pkgname.png"
+    install -Dm644 "${srcdir}/${pkgname}-${pkgver}.asar" "${pkgdir}/usr/lib/${pkgname}/${pkgname}.asar"
+    install -Dm755 "${srcdir}/${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
+}

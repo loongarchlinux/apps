@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=MusicFree
+Name[zh_CN]=MusicFree 桌面版
+Icon=musicfree
+Comment=MusicFree 桌面版
+Categories=AudioVideo;Audio;Player;
+StartupNotify=true
+Exec=musicfree %u
+Terminal=false
+Type=Application
