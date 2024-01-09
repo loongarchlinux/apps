@@ -1,0 +1,15 @@
+pkgname=lbrowser
+pkgver=3.3.1615.0
+pkgrel=1
+pkgdesc="Loongson Browser(龙芯游览器)"
+arch=(loong64)
+url="https://loongnix.cn"
+license=(custom)
+depends=(liblol)
+options=(strip !debug)
+source=("https://pkg.loongnix.cn/loongnix/pool/main/l/lbrowser/lbrowser_${pkgver}-1.stable_loongarch64.deb")
+sha256sums=('f52fa8ea887d46a51641382eb8683ce9b2ad200c25dac0b41f988f1f4ab66c06')
+
+package() {
+      tar -C ${pkgdir} -xf data.tar.xz
+}
