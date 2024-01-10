@@ -1,0 +1,86 @@
+# Maintainer: Giovanni 'ItachiSan' Santini <giovannisantini93@yahoo.it>
+# Maintainer: silentnoodle <lonnqvistben at gmail dot com>
+# Contributor: agnotek <agnostic.sn [at]gmail.com>
+pkgname=telegram-desktop-bin
+pkgver=4.14.4
+pkgrel=1
+pkgdesc="Official desktop version of Telegram messaging app - Static binaries, developement version"
+arch=(loong64)
+url="https://desktop.telegram.org"
+license=(GPL3)
+depends=(
+    desktop-file-utils
+    glib2
+    hicolor-icon-theme
+    libdbus
+    libx11
+    lat
+)
+makedepends=(
+    chrpath
+)
+optdepends=(
+    'libappindicator-gtk2: to hide Telegram in the tray bar in GTK2-based desktop environment'
+    'libappindicator-gtk3: to hide Telegram in the tray bar in GTK3-based desktop environment'
+    'xdg-utils: for automatic opening of URLs, files and directories in proper applications'
+)
+conflicts=(telegram-desktop telegram-desktop-bin)
+provides=(telegram-desktop)
+
+# Sources
+source=(
+    "https://updates.tdesktop.com/tlinux/tsetup.${pkgver}${_devsuffix}.tar.xz"
+    icon16.png
+    icon32.png
+    icon48.png
+    icon64.png
+    icon128.png
+    icon256.png
+    icon512.png
+    org.telegram.desktop.desktop
+    org.telegram.desktop.service
+    org.telegram.desktop.metainfo.xml
+)
+# Checksums
+sha256sums=('88accd8a8b978593978c38f33ed6aa0c40ec3eebd16f365258bd8bd313a440ec'
+            'ea1f36152b143cc2664daef5026656d55be2230ed42d43628e17ef7d2fff718c'
+            '9e4180c78c895783b4559c5e1a7868a2c9aa30a29969fe5dbe9a4ce4cf5cde6c'
+            '041b78681a35f07c3c929662fc66b6592c88588dc7297a5394ef7f923f2118e2'
+            '554dff9f55697d4e8ec69e9aa53678aa5dae3e91aa13adc3b115526d8d51dfc9'
+            '731431e47a5bc91c697d25c3a54fe7ba004752f5b66e0f282c47588ff7a314e6'
+            '3fb1400c7dc9bbc3b5cb3ffedcbf4a9b09c53e28b57a7ff33a8a6b9048864090'
+            'e297771c75bd2f81d637a3234f83568be62092f67d16946be23895fa92fa7119'
+            'd47cc89465281500b23ee646b8deafa67dd35dd0a46f50c3df1d5468abf07ff9'
+            '3a683f1c5cea4dab752339181a7424add98b4c962efe25b39bbf585cddd2596d'
+            'f551d84f6cc8a7709d308b116202f9e0d532d67240054980e4cff164507e5fc4')
+# Some installation information
+install="$pkgname.install"
+
+package() {
+
+	cd "$srcdir/"
+
+	# Program
+	install -dm755 "$pkgdir/usr/bin"
+	install -Dm755 "$srcdir/Telegram/Telegram" "$pkgdir/usr/bin/telegram-desktop"
+
+	# Remove RPATH informations
+	chrpath --delete "$pkgdir/usr/bin/telegram-desktop"
+
+	# Desktop launcher
+	install -Dm644 "$srcdir/org.telegram.desktop.desktop" -t "$pkgdir/usr/share/applications/"
+
+	# D-BUS activation service
+	install -Dm644 "$srcdir/org.telegram.desktop.service" -t "$pkgdir/usr/share/dbus-1/services/"
+
+	# App metainfo
+	install -Dm644 "$srcdir/org.telegram.desktop.metainfo.xml" -t "$pkgdir/usr/share/metainfo/"
+
+	# Icons
+	local icon_size icon_dir
+	for icon_size in 16 32 48 64 128 256 512; do
+		icon_dir="${pkgdir}/usr/share/icons/hicolor/${icon_size}x${icon_size}/apps"
+		install -dm755 "$icon_dir"
+		install -m644 "$srcdir/icon${icon_size}.png" "$icon_dir/telegram.png"
+	done
+}
