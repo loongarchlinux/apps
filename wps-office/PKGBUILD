@@ -1,7 +1,7 @@
 pkgname=wps-office
 pkgver=11.1.0
 pkgbld=11711
-pkgrel=1
+pkgrel=2
 pkgdesc="Kingsoft Office (WPS Office) - an office productivity suite"
 arch=(loong64)
 url="https://linux.wps.cn"
@@ -12,5 +12,6 @@ source=("https://wps-linux-personal.wpscdn.cn/wps/download/ep/Linux2019/${pkgbld
 sha256sums=('e48c69efcd5a7e3053753792d40f7fb5411ce36899108471f219793603708b54')
 
 package() {
-      tar -C ${pkgdir} -xf data.tar.xz
+  tar -C ${pkgdir} -xf data.tar.xz
+  rm -f ${pkgdir}/opt/kingsoft/wps-office/office6/libstdc++.so.6
 }
