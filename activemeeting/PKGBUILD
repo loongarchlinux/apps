@@ -1,6 +1,6 @@
 pkgname=activemeeting
 pkgver=32.2201.42
-pkgrel=1
+pkgrel=2
 pkgdesc="网动会议"
 arch=(loong64)
 url="http://www.iactive.com.cn"
@@ -10,7 +10,7 @@ OPTIONS=(strip !debug)
 source=("http://113.24.212.22:8090/upload/file/activemeeting_${pkgver}-1_loongarch64.deb"
     activemeeting.sh)
 sha256sums=('8db27f557433c6abfc84e9cdb348f38d8ce2828aa7d7a0d797e3ec8ffe57a2a3'
-            'b901b48b60d4830c1711034453f469de14bcc960240df4ce67bb177f3b5dfa8d')
+            '3bbbed3dc96f8331cc4dc6167f565ce92de413cf6a02310587001601efa2b4e1')
 
 package() {
       tar -C ${pkgdir} -xf data.tar.xz
