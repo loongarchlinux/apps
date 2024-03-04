@@ -1,54 +1,31 @@
 pkgname=wechat
-pkgver=1.0
-pkgrel=4
-pkgdesc="wechat"
-arch=('any')
-url="http://www.unkonwn.com"
+pkgver=1.0.1
+pkgrel=0
+pkgdesc="wechat from Tencent"
+arch=('loong64')
+url="http://www.tencent.com"
 license=('custom')
-groups=('wine-apps')
-depends=('wine-app-helper')
-OPTIONS=(!strip)
-noextract=("$pkgname.tar.zst")
-source=("http://public.loongarch.dev/sources/wine-apps/$pkgname.tar.zst/957159f6953765481d00dfbcc8d6ae76/$pkgname.tar.zst"
-    16.png
-    24.png
-    32.png
-    48.png
-    64.png
-    96.png
-    128.png
-    256.png
-    $pkgname.metainfo
+groups=('apps')
+makedepends=('imagemagick')
+#OPTIONS=(!strip)
+#noextract=("$pkgname.tar.zst")
+source=("http://public.loongarch.dev/sources/wechat/$pkgname-beta_${pkgver}.212_loongarch64.deb/bee3220dcc878728efb1f7eaa9fc9ccf/$pkgname-beta_${pkgver}.212_loongarch64.deb"
+    wechat-extra-libs.tar.zst
     $pkgname.desktop)
-sha256sums=('13b7c7da09d182fb62277e992304934a8fe8de1c04441342d1306fdbb749b5de'
-            '009a08143d266a6c8616080984162198653246787011a07551537555d47e7b5f'
-            '85a3e7cf892cf6db0052b8eeccb24402396176109a28e0644b0840c2b7f4f17d'
-            '93eee88197baa3bf59a93a96d55ad8597f8fd068969f0135b376247d7a9cdbb4'
-            '372ba8cab51387178ea1c389c9ba4a66df279af390085c0f499cddbc41000fc8'
-            '383799e6e3c18e66c02445f49633b99fd0cc4508ce72afbf979b91233959f0a0'
-            '484e68d64729a4fbd8737080db3fd11794a2f3a2b38955868b256cfc9456a5ec'
-            '1d8599cee1f6cf5f2223a4000dbeea972da8196ea215045eef39582af42f8471'
-            '75f7c75c0a6329089296071cad40ff6e380ba115775f22ad79d71e53da37fb30'
-            '8de8fb39eb0835716f1c78ef568597b22586dc3751bc7e7db25ce9dc5dc0244d'
-            '1dcf111603247bb4c5405b36e4cd30aef4a049c58e739a18ec71065ca814bb9b')
+sha256sums=('41b4fe105c64a9363bc8d98a7ef052b787c3386aba48770cb5c4e6c081445dd7'
+            'ced281f8a71bc4cacf280eb5849f213a25cdb6ac970244a159332a2ffa6735ab'
+            '9a0a0eb91c1fdb62b9176eb4e422bbfc554e3590f15352016186c6d3ac8f851a')
 
 package() {
-  mkdir -p ${pkgdir}/{opt/wine-apps/$pkgname,usr/{bin,share}}
-
-  cat > app_ignore << EOF
-user.reg
-userdef.reg
-system.reg
-EOF
-  install -Dm644 app_ignore                ${pkgdir}/opt/wine-apps/$pkgname/.appignore
-  install -Dm644 $srcdir/$pkgname.tar.zst  ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.tar.zst
-  install -Dm644 $srcdir/$pkgname.metainfo ${pkgdir}/opt/wine-apps/$pkgname/$pkgname.metainfo
-  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
-  ln -sf wine-run                          ${pkgdir}/usr/bin/$pkgname
-
+#mkdir -p ${pkgdir}/usr/{bin,share}
+  tar -C ${pkgdir} -xf data.tar.xz
+  cp -r wechat-extra-libs/* ${pkgdir}/opt/wechat-beta/
+  ln -sf /opt/wechat-beta/wechat ${pkgdir}/usr/bin/$pkgname
   for i in 16 24 32 48 64 96 128 256; do
-    if [ -f $srcdir/$i.png ]; then
-      install -Dm644 $srcdir/$i.png        ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
+    if [ -f $pkgdir/opt/wechat-beta/icons/wechat.png ]; then
+      mkdir -p ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps
+      convert -resize ${i}x${i} $pkgdir/opt/wechat-beta/icons/wechat.png ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
   done
+  install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
 }

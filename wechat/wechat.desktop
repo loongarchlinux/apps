@@ -9,4 +9,3 @@ StartupNotify=true
 Terminal=false
 Icon=wechat
 Categories=Network;
-StartupWMClass=wechat.exe
