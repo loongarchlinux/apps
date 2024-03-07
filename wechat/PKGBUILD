@@ -10,7 +10,7 @@ groups=('apps')
 depends=(liblol)
 makedepends=('imagemagick')
 options=(strip !debug)
-source=("http://public.loongarch.dev/sources/wechat/$pkgname-beta_${pkgver}.${pkgbld}_loongarch64.deb/bee3220dcc878728efb1f7eaa9fc9ccf/$pkgname-beta_${pkgver}.${pkgbld}_loongarch64.deb"
+source=("https://cdn4.cnxclm.com/uploads/2024/03/05/UAHt9qVI_wechat-beta_1.0.1.212_loongarch64.deb?attname=wechat-beta_1.0.1.212_loongarch64.deb"
     wechat-extra-libs.tar.zst
     $pkgname.desktop)
 sha256sums=('41b4fe105c64a9363bc8d98a7ef052b787c3386aba48770cb5c4e6c081445dd7'
