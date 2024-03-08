@@ -1,5 +1,5 @@
 pkgname=wechat
-pkgver=1.0.1
+pkgver=1.0.0
 pkgbld=212
 pkgrel=1
 pkgdesc="wechat from Tencent"
@@ -10,16 +10,17 @@ groups=('apps')
 depends=(liblol)
 makedepends=('imagemagick')
 options=(strip !debug)
-source=("https://cdn4.cnxclm.com/uploads/2024/03/05/UAHt9qVI_wechat-beta_1.0.1.212_loongarch64.deb?attname=wechat-beta_1.0.1.212_loongarch64.deb"
+source=("wechat-beta_1.0.1.212_loongarch64.deb::https://cdn4.cnxclm.com/uploads/2024/03/05/UAHt9qVI_wechat-beta_1.0.1.212_loongarch64.deb?attname=wechat-beta_1.0.1.212_loongarch64.deb"
     wechat-extra-libs.tar.zst
     $pkgname.desktop)
 sha256sums=('41b4fe105c64a9363bc8d98a7ef052b787c3386aba48770cb5c4e6c081445dd7'
-            'ced281f8a71bc4cacf280eb5849f213a25cdb6ac970244a159332a2ffa6735ab'
+            '004955011379369cadb41373de08f4b870f3cd4de8c79da50259c84d62901bf0'
             '9a0a0eb91c1fdb62b9176eb4e422bbfc554e3590f15352016186c6d3ac8f851a')
 
 package() {
   tar -C ${pkgdir} -xf data.tar.xz
-  cp -r wechat-extra-libs/* ${pkgdir}/opt/wechat-beta/
+  cp -r wechat-extra-libs/usr ${pkgdir}/
+  cp wechat-extra-libs/*.so* ${pkgdir}/opt/wechat-beta/
   ln -sf /opt/wechat-beta/wechat ${pkgdir}/usr/bin/$pkgname
   for i in 16 24 32 48 64 96 128 256; do
     if [ -f $pkgdir/opt/wechat-beta/icons/wechat.png ]; then
