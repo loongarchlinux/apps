@@ -1,32 +1,83 @@
 pkgname=wechat
 pkgver=1.0.0
 pkgbld=212
-pkgrel=1
-pkgdesc="wechat from Tencent"
+pkgrel=2
+pkgdesc="wechat from Tencent(腾讯QQ)"
 arch=('loong64')
-url="http://www.tencent.com"
+url="https://weixin.qq.com"
 license=('custom')
 groups=('apps')
-depends=(liblol)
-makedepends=('imagemagick')
+#depends=(liblol)
+depends=('liblol' 'bubblewrap')
+makedepends=('imagemagick' 'dpkg')
 options=(strip !debug)
 source=("wechat-beta_1.0.1.212_loongarch64.deb::https://cdn4.cnxclm.com/uploads/2024/03/05/UAHt9qVI_wechat-beta_1.0.1.212_loongarch64.deb?attname=wechat-beta_1.0.1.212_loongarch64.deb"
-    wechat-extra-libs.tar.zst
+    "wechat.deb::http://public.loongarch.dev/sources/wechat/wechat-2.1.10-loong64.deb/0a5299c47220e176708ee75393d22b56/wechat-2.1.10-loong64.deb"
+    "http://public.loongarch.dev/sources/wechat/license.tar.gz/6b159c6e9d21a98925489bc37a9aea43/license.tar.gz"
+    "libtiff5.deb::https://pkg.loongnix.cn/loongnix/pool/main/t/tiff/libtiff5_4.1.0+git191117-2~deb10u1.lnd.4_loongarch64.deb"
+    "libwebp6.deb::https://pkg.loongnix.cn/loongnix/pool/main/libw/libwebp/libwebp6_0.6.1-2.lnd.2_loongarch64.deb"
+    "libjbig.deb::https://pkg.loongnix.cn/loongnix/pool/main/j/jbigkit/libjbig0_2.1-3.2_loongarch64.deb"
+    "libjpeg.deb::https://pkg.loongnix.cn/loongnix/pool/main/libj/libjpeg-turbo/libjpeg62-turbo_1.5.2-2.lnd.4_loongarch64.deb"
+    wechat.sh
     $pkgname.desktop)
 sha256sums=('41b4fe105c64a9363bc8d98a7ef052b787c3386aba48770cb5c4e6c081445dd7'
-            '004955011379369cadb41373de08f4b870f3cd4de8c79da50259c84d62901bf0'
+            '73f5c891bc2748c3246341c853f157acb3afcb4e8901e6502f7ac49106dda002'
+            '53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69'
+            '674d2fa5546480b32d72386b52fbd7b8fbda6c7a4162bd930527134da3eb74cf'
+            'ca90e844566f0b86165164fc92d863155e99a7dedaf2c09d2cc1b129fcecb7b6'
+            '5ca4f04ee553fd9bdf1090b766a0fd7b2474c1f72eb2d76dbc3f2183d243b0dc'
+            'eb386d5b9dac62bebaf4d8ff6db7c269a2244f6a1c0c8224a3da7007c33f5e24'
+            '3d0d1f4c2e432ea325a26ce835407fe80cc92154253cf9aeddc5e08b7a3419fa'
             '9a0a0eb91c1fdb62b9176eb4e422bbfc554e3590f15352016186c6d3ac8f851a')
+noextract=("wechat.deb")
+for _source in "${source[@]}"; do
+  if [[ "$_source" =~ ^lib.*deb$ ]]; then
+    noextract+=("${_source%%::*}")
+  fi
+done
+
+_pick_file() {
+  local p="$1" f="$2" s="$3" d="$4" t
+  t="$(echo "$p"|tr . _)"
+  dpkg-deb -x ${srcdir}/${p} $t
+  [ -d "${pkgdir}/$d" ] || mkdir -p "${pkgdir}/$d"
+  cp -L "$t/$s/$f" "${pkgdir}/$d"
+  rm -r $t
+}
+
+_pick_so() {
+  local p="$1" f="$2" d="$3"
+  _pick_file $p $f "/usr/lib/loongarch64-linux-gnu" $d
+}
 
 package() {
   tar -C ${pkgdir} -xf data.tar.xz
-  cp -r wechat-extra-libs/usr ${pkgdir}/
-  cp wechat-extra-libs/*.so* ${pkgdir}/opt/wechat-beta/
-  ln -sf /opt/wechat-beta/wechat ${pkgdir}/usr/bin/$pkgname
+
+  _pick_file wechat.deb libuosdevicea.so /usr/lib/license/ /usr/lib/license/
+  _pick_so libtiff5.deb libtiff.so.5 /opt/wechat-beta/
+  _pick_so libwebp6.deb libwebp.so.6 /opt/wechat-beta/
+  _pick_so libjbig.deb libjbig.so.0 /opt/wechat-beta/
+  _pick_so libjpeg.deb libjpeg.so.62 /opt/wechat-beta/
+
   for i in 16 24 32 48 64 96 128 256; do
     if [ -f $pkgdir/opt/wechat-beta/icons/wechat.png ]; then
       mkdir -p ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps
       convert -resize ${i}x${i} $pkgdir/opt/wechat-beta/icons/wechat.png ${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/$pkgname.png
     fi
   done
+  install -Dm755 wechat.sh "${pkgdir}/usr/bin/wechat"
   install -Dm644 $srcdir/$pkgname.desktop  ${pkgdir}/usr/share/applications/$pkgname.desktop
+
+  cp -r license/etc ${pkgdir}/opt/wechat-beta
+  cp -r license/var ${pkgdir}/opt/wechat-beta
+
+#
+#	echo "Fixing licenses"
+##	install -Dm644 wechat-uos/usr/lib/license/libuosdevicea.so ${pkgdir}/usr/lib/license/libuosdevicea.so
+#	echo "Clean unused file"
+#	rm -f "${pkgdir}/usr/share/applications/wechat.desktop"
+#	echo "Installing stuff in place"
+#	install -Dm755 libtiff.so.6.0.2 "${pkgdir}/opt/wechat-beta/libtiff.so.5"
+#	install -Dm644 wechat-beta.desktop "${pkgdir}/usr/share/applications/wechat-beta.desktop"
+#	install -Dm644 wechat-beta.png "${pkgdir}/usr/share/icons/hicolor/256x256/apps/wechat-beta.png"
 }
