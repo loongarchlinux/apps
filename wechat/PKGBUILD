@@ -6,10 +6,29 @@ arch=('loong64')
 url="https://weixin.qq.com"
 license=('custom')
 groups=('apps')
-#depends=(liblol)
-depends=('liblol' 'bubblewrap')
-makedepends=('imagemagick' 'dpkg')
-options=(strip !debug)
+depends=(
+    'liblol'
+    'alsa-lib'
+    'at-spi2-core'
+    'bubblewrap'
+    'flatpak-xdg-utils'
+    'libxcomposite'
+    'libxkbcommon-x11'
+    'libxrandr'
+    'lsb-release'
+    'mesa'
+    'nss'
+    'openssl-1.1'
+    'pango'
+    'xcb-util-image'
+    'xcb-util-keysyms'
+    'xcb-util-renderutil'
+    'xcb-util-wm'
+    'xdg-desktop-portal'
+    'xdg-user-dirs'
+)
+options=(strip !debug emptydirs)
+makedepends=('dpkg')
 install="${pkgname}.install"
 source=("${pkgname}_${pkgver}_loong64.deb::https://home-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_${pkgver}_loongarch64.deb"
     "libtiff5.deb::https://pkg.loongnix.cn/loongnix/pool/main/t/tiff/libtiff5_4.1.0+git191117-2~deb10u1.lnd.4_loongarch64.deb"
@@ -28,7 +47,7 @@ sha256sums=('8ae25e2cc283eaff09f222b0dfe73238337b3d942b2e98bda74fff9a4234ba31'
             'eb386d5b9dac62bebaf4d8ff6db7c269a2244f6a1c0c8224a3da7007c33f5e24'
             '53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69'
             'b25598b64964e4a38f8027b9e8b9a412c6c8d438a64f862d1b72550ac8c75164'
-            'b59ef23744f582d9b90a41790ceeb77233c153e3e7f916d892613dac248ae106'
+            '0e5f7aa36326cfac6cfb04e397150a2d38e3d2a67b771f8f1149566fe6a6a964'
             '35f3cf67f92216c751eb6b2ef1135058077a214d3c03f5fcff862f09c85eba40')
 noextract=()
 for _source in "${source[@]}"; do
