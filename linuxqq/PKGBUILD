@@ -1,6 +1,5 @@
 pkgname=linuxqq
-pkgver=3.2.6
-pkgbld=22165
+pkgver=3.2.6.240322
 pkgrel=1
 pkgdesc="New Linux QQ based on Electron"
 arch=(loong64)
@@ -9,9 +8,10 @@ license=(custom)
 groups=('apps')
 depends=(liblol)
 options=(strip !debug)
-source=("https://dldir1.qq.com/qqfile/qq/QQNT/e619e933/${pkgname}_${pkgver}-${pkgbld}_loongarch64.deb"
+_downver=`echo ${pkgver}|sed -r 's/([0-9]+).([0-9]+).([0-9]+).([0-9]+)/\1.\2.\3_\4/'`
+source=("https://dldir1.qq.com/qqfile/qq/QQNT/Linux/QQ_${_downver}_loongarch64_01.deb"
     linuxqq.sh)
-sha256sums=('cba933f374c97f4fec767ce5afbefe7f937f1b2ed910b3cc2b9c6df25218cccf'
+sha256sums=('925317d939d0d06a32f01cdb32955369c2f4c743551a2e38f98d02112951553e'
             'fcc8ab360be9fde853b9a4279251072df6807a3bd697677cd8175fb0b89d9be7')
 
 package() {
