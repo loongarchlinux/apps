@@ -1,6 +1,6 @@
 pkgname=wemeet
 pkgver=3.19.0.401
-pkgrel=1
+pkgrel=2
 pkgdesc="Tencent Video Conferencing, tencent meeting 腾讯会议"
 arch=(loong64)
 url="https://meeting.tencent.com"
@@ -13,5 +13,6 @@ sha256sums=('a7093611beaf22e8d7fb52ccbb876e2e745882b60557b77733cd592596875d08')
 package() {
   tar -C ${pkgdir} -xf data.tar.xz
   mkdir -p ${pkgdir}/usr/bin
+  sed -i 's/exec wemeetapp/exec wemeetapp --no-sandbox/' ${pkgdir}/opt/wemeet/wemeetapp.sh
   ln -sf /opt/wemeet/wemeetapp.sh ${pkgdir}/usr/bin/wemeet
 }
