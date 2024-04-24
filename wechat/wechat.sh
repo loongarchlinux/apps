@@ -34,8 +34,9 @@ BWRAP_ENV_APPEND=()
 env_add QT_QPA_PLATFORM xcb
 env_add QT_AUTO_SCREEN_SCALE_FACTOR 1
 env_add PATH "/sandbox:${PATH}"
+env_add TZ 'Asia/Shanghai'
 
-case "${XMODIFIERS}" in 
+case "${XMODIFIERS}" in
     *@im=fcitx*)
         echo "Workaround for fcitx applied"
         env_add QT_IM_MODULE fcitx
@@ -98,7 +99,7 @@ BWRAP_ARGS=(
     --ro-bind /etc/passwd{,}
     --ro-bind /etc/nsswitch.conf{,}
     --ro-bind /etc/resolv.conf{,}
-    --ro-bind /etc/localtime{,}
+    --symlink /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
     --ro-bind-try /etc/fonts{,}
 
     # /sys

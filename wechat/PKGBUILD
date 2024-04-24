@@ -1,6 +1,6 @@
 pkgname=wechat
 pkgver=1.0.0.238
-pkgrel=1
+pkgrel=2
 pkgdesc="wechat from Tencent(腾讯QQ)"
 arch=('loong64')
 url="https://weixin.qq.com"
@@ -47,7 +47,7 @@ sha256sums=('8ae25e2cc283eaff09f222b0dfe73238337b3d942b2e98bda74fff9a4234ba31'
             'eb386d5b9dac62bebaf4d8ff6db7c269a2244f6a1c0c8224a3da7007c33f5e24'
             '53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69'
             'b25598b64964e4a38f8027b9e8b9a412c6c8d438a64f862d1b72550ac8c75164'
-            '0e5f7aa36326cfac6cfb04e397150a2d38e3d2a67b771f8f1149566fe6a6a964'
+            'a301e17b1cc0fa2da96e812ab3457dc52924753ee9399110f214721b31774d54'
             '35f3cf67f92216c751eb6b2ef1135058077a214d3c03f5fcff862f09c85eba40')
 noextract=()
 for _source in "${source[@]}"; do
