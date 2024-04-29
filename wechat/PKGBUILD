@@ -1,6 +1,6 @@
 pkgname=wechat
-pkgver=1.0.0.238
-pkgrel=2
+pkgver=1.0.0.241
+pkgrel=1
 pkgdesc="wechat from Tencent(腾讯QQ)"
 arch=('loong64')
 url="https://weixin.qq.com"
@@ -40,7 +40,7 @@ source=("${pkgname}_${pkgver}_loong64.deb::https://home-store-packages.uniontech
     "${pkgname}.sh"
     "${pkgname}.desktop"
 )
-sha256sums=('8ae25e2cc283eaff09f222b0dfe73238337b3d942b2e98bda74fff9a4234ba31'
+sha256sums=('90c3276fd8e338eb50162bcb0eef9a41cb553187851d0d5f360e3d010138c8b9'
             '674d2fa5546480b32d72386b52fbd7b8fbda6c7a4162bd930527134da3eb74cf'
             'ca90e844566f0b86165164fc92d863155e99a7dedaf2c09d2cc1b129fcecb7b6'
             '5ca4f04ee553fd9bdf1090b766a0fd7b2474c1f72eb2d76dbc3f2183d243b0dc'
