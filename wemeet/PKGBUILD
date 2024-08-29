@@ -1,14 +1,14 @@
 pkgname=wemeet
-pkgver=3.19.0.401
-pkgrel=2
+pkgver=3.19.2.400
+pkgrel=1
 pkgdesc="Tencent Video Conferencing, tencent meeting 腾讯会议"
 arch=(loong64)
 url="https://meeting.tencent.com"
 license=(custom)
 depends=(liblol)
 OPTIONS=(strip !debug)
-source=("https://updatecdn.meeting.qq.com/cos/e32241120138358ec28fbedeceef631c/TencentMeeting_0300000000_${pkgver}_loongarch64_default.publish.deb")
-sha256sums=('a7093611beaf22e8d7fb52ccbb876e2e745882b60557b77733cd592596875d08')
+source=("wemeet-${pkgver}-loongarch.deb")
+sha256sums=('0e7bf4a499c14b879a4488dea88e059e434249686f8cfd700e69dfa336ac28b9')
 
 package() {
   tar -C ${pkgdir} -xf data.tar.xz
