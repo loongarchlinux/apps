@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-/opt/QQ/qq $@
+/opt/QQ/qq --no-sandbox $@
