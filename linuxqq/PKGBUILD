@@ -1,5 +1,5 @@
 pkgname=linuxqq
-pkgver=3.2.9.24402
+pkgver=3.2.12.27597
 pkgrel=1
 pkgdesc="New Linux QQ based on Electron"
 arch=(loong64)
@@ -11,7 +11,7 @@ options=(strip !debug)
 _downver=`echo ${pkgver}|sed -r 's/([0-9]+).([0-9]+).([0-9]+).([0-9]+)/\1.\2.\3-\4/'`
 source=("https://60-6-2-199.volcsiriusbd.com/dldir1.qq.com/qqfile/qq/QQNT/442cbbb1/${pkgname}_${_downver}_loongarch64.deb"
     linuxqq.sh)
-sha256sums=('4f17a048b3c818534fb5def3fa59b2213c5b5115ddf9e672d805106a27f2f3fb'
+sha256sums=('2a2198f9d4adbf75ce7fab529ad3e4d333286e480e187ba2f743b736810171db'
             '482aafceb54fd70204337a8596edd6791349998881869e319353b44d85364712')
 
 package() {
