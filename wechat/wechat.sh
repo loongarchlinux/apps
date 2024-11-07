@@ -139,4 +139,5 @@ BWRAP_ARGS=(
     --ro-bind "${XDG_RUNTIME_DIR}/pulse"{,}
 )
 
+export LD_LIBRARY_PATH=/opt/wechat:$LD_LIBRARY_PATH
 exec bwrap "${BWRAP_ARGS[@]}" "${BWRAP_CUSTOM_BINDS[@]}" "${BWRAP_DEV_BINDS[@]}" "${BWRAP_ENV_APPEND[@]}" /opt/wechat/wechat "$@"

@@ -1,5 +1,5 @@
 pkgname=wechat
-pkgver=1.0.0.241
+pkgver=4.0.0.23
 pkgrel=1
 pkgdesc="wechat from Tencent(腾讯QQ)"
 arch=('loong64')
@@ -30,7 +30,7 @@ depends=(
 options=(strip !debug emptydirs)
 makedepends=('dpkg')
 install="${pkgname}.install"
-source=("${pkgname}_${pkgver}_loong64.deb::https://home-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_${pkgver}_loongarch64.deb"
+source=("https://home-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/wechat_${pkgver}_loongarch64.deb"
     "libtiff5.deb::https://pkg.loongnix.cn/loongnix/pool/main/t/tiff/libtiff5_4.1.0+git191117-2~deb10u1.lnd.4_loongarch64.deb"
     "libwebp6.deb::https://pkg.loongnix.cn/loongnix/pool/main/libw/libwebp/libwebp6_0.6.1-2.lnd.2_loongarch64.deb"
     "libjbig.deb::https://pkg.loongnix.cn/loongnix/pool/main/j/jbigkit/libjbig0_2.1-3.2_loongarch64.deb"
@@ -40,14 +40,14 @@ source=("${pkgname}_${pkgver}_loong64.deb::https://home-store-packages.uniontech
     "${pkgname}.sh"
     "${pkgname}.desktop"
 )
-sha256sums=('90c3276fd8e338eb50162bcb0eef9a41cb553187851d0d5f360e3d010138c8b9'
+sha256sums=('8bf5d8931e048285425f14ec9e765989fceb6584ecce20010db59916cbc8e2b4'
             '674d2fa5546480b32d72386b52fbd7b8fbda6c7a4162bd930527134da3eb74cf'
             'ca90e844566f0b86165164fc92d863155e99a7dedaf2c09d2cc1b129fcecb7b6'
             '5ca4f04ee553fd9bdf1090b766a0fd7b2474c1f72eb2d76dbc3f2183d243b0dc'
             'eb386d5b9dac62bebaf4d8ff6db7c269a2244f6a1c0c8224a3da7007c33f5e24'
             '53760079c1a5b58f2fa3d5effe1ed35239590b288841d812229ef4e55b2dbd69'
             'b25598b64964e4a38f8027b9e8b9a412c6c8d438a64f862d1b72550ac8c75164'
-            'a301e17b1cc0fa2da96e812ab3457dc52924753ee9399110f214721b31774d54'
+            'fe3fd94d8fdf01d992906121ecc1434806d33f047b5f583b23dbfd6447783bc2'
             '35f3cf67f92216c751eb6b2ef1135058077a214d3c03f5fcff862f09c85eba40')
 noextract=()
 for _source in "${source[@]}"; do
@@ -72,8 +72,8 @@ _pick_so() {
 
 package() {
   echo 'Popupating pkgdir with data from wechat-universal deb file...'
-  xz -cdT0 ./data.tar.xz | bsdtar -xpC "${pkgdir}" ./opt/apps/com.tencent.wechat
-  mv "${pkgdir}"/opt/{apps/com.tencent.wechat/files,"${pkgname}"}
+  xz -cdT0 ./data.tar.xz | bsdtar -xpC "${pkgdir}" #./opt/wechat
+#mv "${pkgdir}"/opt/{apps/com.tencent.wechat/files,"${pkgname}"}
 
   _pick_so libtiff5.deb libtiff.so.5 /opt/wechat/
   _pick_so libwebp6.deb libwebp.so.6 /opt/wechat/
@@ -81,18 +81,18 @@ package() {
   _pick_so libjpeg.deb libjpeg.so.62 /opt/wechat/
 
 # icons
-  echo 'Installing icons...'
-  for res in 16 32 48 64 128 256; do
-    install -Dm644 \
-      "${pkgdir}/opt/apps/com.tencent.wechat/entries/icons/hicolor/${res}x${res}/apps/com.tencent.wechat.png" \
-      "${pkgdir}/usr/share/icons/hicolor/${res}x${res}/apps/${pkgname}.png"
-  done
-  rm -rf "${pkgdir}"/opt/apps
+#  echo 'Installing icons...'
+#  for res in 16 32 48 64 128 256; do
+#    install -Dm644 \
+#      "${pkgdir}/opt/apps/com.tencent.wechat/entries/icons/hicolor/${res}x${res}/apps/com.tencent.wechat.png" \
+#      "${pkgdir}/usr/share/icons/hicolor/${res}x${res}/apps/${pkgname}.png"
+#  done
+#  rm -rf "${pkgdir}"/opt/apps
 
   echo 'Fixing licenses...'
   local _wechat_root="${pkgdir}/usr/share/${pkgname}"
   install -dm755 {"${pkgdir}","${_wechat_root}"}/usr/lib/license
-  mv "${pkgdir}/opt/${pkgname}/libuosdevicea.so" "${_wechat_root}"/usr/lib/license/
+#  mv "${pkgdir}/opt/${pkgname}/libuosdevicea.so" "${_wechat_root}"/usr/lib/license/
   cp -ra license/etc "${_wechat_root}"
   cp -ra license/var "${_wechat_root}"
 
