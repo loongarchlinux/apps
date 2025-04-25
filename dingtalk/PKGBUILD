@@ -1,0 +1,66 @@
+pkgname=dingtalk
+pkgver=7.6.45.5032501
+pkgrel=1
+pkgdesc="钉钉"
+arch=(loong64)
+url="https://meeting.tencent.com"
+license=(custom)
+groups=('apps')
+depends=(liblol)
+makedepends=('dpkg')
+OPTIONS=(strip !debug)
+source=("https://dtapp-pub.dingtalk.com/dingtalk-desktop/xc_dingtalk_update/linux_deb/Release/com.alibabainc.dingtalk_${pkgver}_loongarch64.deb"
+  "libpango.deb::https://github.com/yetist/liblol-libs/raw/refs/heads/main/libpango-1.0-0/libpango-1.0-0_1.42.4-8~deb10u1.lnd.1_loongarch64.deb"
+  "libpangocairo.deb::https://github.com/yetist/liblol-libs/raw/refs/heads/main/libpangocairo-1.0-0/libpangocairo-1.0-0_1.42.4-8~deb10u1.lnd.1_loongarch64.deb"
+  "libpangoft2.deb::https://github.com/yetist/liblol-libs/raw/refs/heads/main/libpangoft2-1.0-0/libpangoft2-1.0-0_1.42.4-8~deb10u1.lnd.1_loongarch64.deb"
+  "libgtk.deb::https://github.com/yetist/liblol-libs/raw/refs/heads/main/libgtk-3-0/libgtk-3-0_3.24.5-1.lnd.1_loongarch64.deb"
+  "${pkgname}.desktop"
+  "${pkgname}.sh"
+)
+
+sha256sums=('0580bdd9d0b62a350818f088ed0ed8452c2ffd004cf0a983b3abd3e3915f46b3'
+            'a2f1ded933d3dcdd3b3fc060c65abb57c47881684b36c05090fdaa75ceb42e05'
+            '774f3b26620495e67d2236bcec9df00476777bb8a3093de352db1cf57c000d49'
+            '9f6c0cf7a4ba1012af3c867831c06fe6674620552233e8460858beecf2183b92'
+            '7fa9a1f744c6c709021eeb68d6965d0216fc2ad5433f1ae79bcfaa930956a627'
+            '12b704bcce79b1c59b26ae64110a1a502cbbd804bf5d6afa68c16211dacfc82d'
+            'e76482b9d0ecf8138b45eb4433b27e1a6bd6a09635b383db38097622f7eb9baa')
+
+noextract=()
+for _source in "${source[@]}"; do
+  if [[ "$_source" =~ ^lib.*deb$ ]]; then
+    noextract+=("${_source%%::*}")
+  fi
+done
+
+_pick_file() {
+  local p="$1" f="$2" s="$3" d="$4" t
+  t="$(echo "$p" | tr . _)"
+  dpkg-deb -x ${srcdir}/${p} $t
+  [ -d "${pkgdir}/$d" ] || mkdir -p "${pkgdir}/$d"
+  cp -L "$t/$s/$f" "${pkgdir}/$d"
+  rm -r $t
+}
+
+_pick_so() {
+  local p="$1" f="$2" d="$3"
+  _pick_file $p $f "/usr/lib/loongarch64-linux-gnu" $d
+}
+
+package() {
+  xz -cdT0 ./data.tar.xz | bsdtar -xpC "${pkgdir}"
+  mv "${pkgdir}"/opt/{apps/com.alibabainc.dingtalk/files,"${pkgname}"}
+
+  _pick_so libpango.deb libpango-1.0.so.0 /opt/dingtalk/7.6.45-Release.5032501/
+  _pick_so libpangocairo.deb libpangocairo-1.0.so.0 /opt/dingtalk/7.6.45-Release.5032501/
+  _pick_so libpangoft2.deb libpangoft2-1.0.so.0 /opt/dingtalk/7.6.45-Release.5032501/
+  _pick_so libgtk.deb libgtk-3.so.0 /opt/dingtalk/7.6.45-Release.5032501/
+  ln -sf libsodium.so "${pkgdir}"/opt/dingtalk/7.6.45-Release.5032501/libsodium.so.23
+
+  rm -rf ${pkgdir}/opt/apps/
+  rm -f ${pkgdir}/usr/share/applications/com.alibabainc.dingtalk.desktop
+
+  echo 'Installing desktop files...'
+  install -Dm644 "${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+  install -Dm755 "${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
+}
